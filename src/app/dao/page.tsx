@@ -32,6 +32,13 @@ export default function DAOCourtPage() {
 
   useEffect(() => {
     loadDisputes();
+
+    // Live updates — poll every 5 seconds
+    const interval = setInterval(() => {
+      loadDisputes();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [loadDisputes]);
 
   const getTimeRemaining = (deadline: string) => {

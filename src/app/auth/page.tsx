@@ -78,6 +78,25 @@ export default function AuthPage() {
           // automatically once Clerk fully propagates the new session.
           router.replace("/dashboard");
         } else if (result.status === "needs_second_factor") {
+          // Prepare the second factor — this triggers the OTP email delivery
+          const secondFactors = result.supportedSecondFactors || [];
+          const emailFactor = secondFactors.find(
+            (f: { strategy: string }) => f.strategy === "email_code"
+          );
+          const phoneFactor = secondFactors.find(
+            (f: { strategy: string }) => f.strategy === "phone_code"
+          );
+          const totpFactor = secondFactors.find(
+            (f: { strategy: string }) => f.strategy === "totp"
+          );
+
+          if (emailFactor) {
+            await result.prepareSecondFactor({ strategy: "email_code" });
+          } else if (phoneFactor) {
+            await result.prepareSecondFactor({ strategy: "phone_code" });
+          }
+          // TOTP (authenticator app) doesn't need prepare — user already has the code
+
           setVerifying2FA(true);
         } else {
           setError("Sign-in could not be completed. Please try again.");
@@ -156,11 +175,30 @@ export default function AuthPage() {
 
     try {
       const validFactors = clerk.client.signIn.supportedSecondFactors || [];
-      const factor = validFactors[0];
-      if (!factor) throw new Error("No 2FA methods available");
+      const emailFactor = validFactors.find(
+        (f: { strategy: string }) => f.strategy === "email_code"
+      );
+      const phoneFactor = validFactors.find(
+        (f: { strategy: string }) => f.strategy === "phone_code"
+      );
+      const totpFactor = validFactors.find(
+        (f: { strategy: string }) => f.strategy === "totp"
+      );
+
+      // Determine which strategy to attempt
+      let strategy: string;
+      if (emailFactor) {
+        strategy = "email_code";
+      } else if (phoneFactor) {
+        strategy = "phone_code";
+      } else if (totpFactor) {
+        strategy = "totp";
+      } else {
+        throw new Error("No 2FA methods available");
+      }
 
       const result = await clerk.client.signIn.attemptSecondFactor({
-        strategy: factor.strategy as any,
+        strategy: strategy as any,
         code: code2FA,
       });
 
@@ -180,6 +218,34 @@ export default function AuthPage() {
     }
   };
 
+  const handleResend2FA = async () => {
+    if (!clerk.loaded) return;
+    setError(null);
+    try {
+      const validFactors = clerk.client.signIn.supportedSecondFactors || [];
+      const emailFactor = validFactors.find(
+        (f: { strategy: string }) => f.strategy === "email_code"
+      );
+      const phoneFactor = validFactors.find(
+        (f: { strategy: string }) => f.strategy === "phone_code"
+      );
+
+      if (emailFactor) {
+        await clerk.client.signIn.prepareSecondFactor({ strategy: "email_code" });
+        setError(null);
+        alert("A new verification code has been sent to your email.");
+      } else if (phoneFactor) {
+        await clerk.client.signIn.prepareSecondFactor({ strategy: "phone_code" });
+        alert("A new verification code has been sent to your phone.");
+      } else {
+        setError("Your 2FA method uses an authenticator app — check your app for the code.");
+      }
+    } catch (err: unknown) {
+      const clerkErr = err as { errors?: { message: string }[]; message?: string };
+      setError(clerkErr.errors?.[0]?.message || "Failed to resend code.");
+    }
+  };
+
   if (verifying2FA) {
     return (
       <div className="min-h-screen pt-32 pb-20 flex items-center justify-center">
@@ -187,7 +253,7 @@ export default function AuthPage() {
           <ScrollReveal>
             <h1 className="text-3xl font-bold mb-2 text-white">Two-Factor Authentication</h1>
             <p className="text-vault-text-secondary text-sm mb-8">
-              Enter the 2FA code to securely log in
+              Enter the verification code sent to your email or from your authenticator app
             </p>
             <Card hover={false} className="p-8 text-left">
               <form onSubmit={handleVerify2FA} className="space-y-4">
@@ -198,7 +264,9 @@ export default function AuthPage() {
                     className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
                     value={code2FA}
                     onChange={(e) => setCode2FA(e.target.value)}
+                    placeholder="Enter 6-digit code"
                     required
+                    autoFocus
                   />
                 </div>
                 {error && (
@@ -209,7 +277,14 @@ export default function AuthPage() {
                 <Button type="submit" variant="primary" className="w-full mt-6" loading={loading}>
                   Verify Code
                 </Button>
-                <div className="mt-4 text-center">
+                <div className="mt-4 flex items-center justify-between">
+                  <button
+                    type="button"
+                    className="text-sm text-vault-purple-light hover:underline font-medium"
+                    onClick={handleResend2FA}
+                  >
+                    Resend Code
+                  </button>
                   <button
                     type="button"
                     className="text-sm text-vault-text-muted hover:text-white transition-colors"

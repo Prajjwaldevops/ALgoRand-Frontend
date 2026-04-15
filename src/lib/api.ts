@@ -302,6 +302,16 @@ export const bountyApi = {
     });
   },
 
+  /** Freelancer raises a DAO dispute with 300+ word description */
+  raiseDispute: (id: string, description: string) =>
+    apiFetch<{ dispute_id: string; voting_deadline: string }>(
+      `/api/bounties/${id}/dispute`,
+      {
+        method: "POST",
+        body: JSON.stringify({ description }),
+      }
+    ),
+
   refundExpired: (id: string) =>
     apiFetch(`/api/bounties/${id}/refund-expired`, { method: "POST" }),
 
@@ -373,20 +383,49 @@ export interface Dispute {
 
 export const daoApi = {
   listActive: () => apiFetch<Dispute[]>("/api/dao/disputes"),
+  getDisputeDetail: (disputeId: string) =>
+    apiFetch<DisputeDetail>(`/api/dao/disputes/${disputeId}`),
   getDisputeVotes: (disputeId: string) =>
     apiFetch<{ votes: DAOVote[]; tally: { creator: number; freelancer: number; total: number } }>(
       `/api/dao/disputes/${disputeId}/votes`
+    ),
+  /** Build unsigned grouped txn: Payment(0.001 ALGO → escrow) + AppCall(cast_dao_vote) */
+  buildVoteTxn: (disputeId: string, walletAddress: string, vote: string) =>
+    apiFetch<{ transactions: string[]; group_id: string; escrow_address: string; gas_fee_algo: number; vote_for: number; app_id: number }>(
+      `/api/dao/disputes/${disputeId}/build-vote-txn`,
+      {
+        method: "POST",
+        body: JSON.stringify({ wallet_address: walletAddress, vote }),
+      }
     ),
   castVote: (disputeId: string, vote: string, signedTxns: string[]) =>
     apiFetch(`/api/dao/disputes/${disputeId}/vote`, {
       method: "POST",
       body: JSON.stringify({ vote, signed_txns: signedTxns }),
     }),
-  finalize: (disputeId: string, signedTxns: string[]) =>
+  /** Build unsigned resolve_dao_dispute() app call for finalization */
+  buildFinalizeTxn: (disputeId: string, walletAddress: string) =>
+    apiFetch<{ transactions: string[]; expected_winner: string; votes_creator: number; votes_freelancer: number; app_id: number }>(
+      `/api/dao/disputes/${disputeId}/build-finalize-txn`,
+      {
+        method: "POST",
+        body: JSON.stringify({ wallet_address: walletAddress }),
+      }
+    ),
+  finalize: (disputeId: string, signedTxns?: string[]) =>
     apiFetch(`/api/dao/disputes/${disputeId}/finalize`, {
       method: "POST",
-      body: JSON.stringify({ signed_txns: signedTxns }),
+      body: JSON.stringify({ signed_txns: signedTxns || [] }),
     }),
+  /** Get current user's voting compliance status */
+  getVotingStatus: () =>
+    apiFetch<{
+      last_vote_at: string | null;
+      is_compliant: boolean;
+      is_banned: boolean;
+      days_remaining: number;
+      requirement: string;
+    }>("/api/dao/voting-status"),
 };
 
 // --- Dashboard ---
@@ -544,6 +583,42 @@ export interface DAOVote {
   vote_txn_id?: string;
   voted_at: string;
   voter: { username: string; display_name?: string; avatar_url?: string };
+}
+
+// Full dispute detail returned by GET /api/dao/disputes/:id
+export interface ConversationEntry {
+  submission_number: number;
+  description: string;
+  status: string;
+  rejection_feedback: string;
+  work_hash: string;
+  mega_nz_link: string;
+  submitted_at: string;
+  reviewed_at?: string;
+}
+
+export interface DisputeDetail {
+  id: string;
+  dispute_id: string;
+  bounty_id: string;
+  freelancer_id: string;
+  creator_id: string;
+  freelancer_description: string;
+  submission_history: Record<string, unknown>[];
+  conversation: ConversationEntry[];
+  status: string;
+  votes_creator: number;
+  votes_freelancer: number;
+  voting_deadline: string;
+  resolved_at?: string;
+  resolution_txn_id?: string;
+  ipfs_dispute_cid?: string;
+  created_at: string;
+  freelancer_name: string;
+  creator_name: string;
+  bounty: { title: string; reward_algo: number; deadline: string };
+  votes: { creator: number; freelancer: number; total: number };
+  voting_active: boolean;
 }
 
 // --- Bounty Acceptance Types (v3.2) ---

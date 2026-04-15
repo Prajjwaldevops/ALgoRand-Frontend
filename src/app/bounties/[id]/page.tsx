@@ -426,10 +426,12 @@ export default function BountyDetailPage() {
                 {/* Dispute & Let Go (Freelancer only — requires at least 1 submission) */}
                 {(bounty.status === "in_progress" || bounty.status === "submitted" || bounty.status === "expired") && user?.role === "freelancer" && submissions.length >= 1 && (
                   <div className="space-y-2 pt-2 border-t border-vault-border/50">
-                    <Button variant="danger" size="md" className="w-full" id="dispute-btn">
-                      <AlertTriangle className="w-4 h-4" />
-                      Initiate Dispute
-                    </Button>
+                    <Link href={`/bounties/${id}/dispute`} className="w-full">
+                      <Button variant="danger" size="md" className="w-full" id="dispute-btn">
+                        <AlertTriangle className="w-4 h-4" />
+                        Raise a Dispute
+                      </Button>
+                    </Link>
                     <Button variant="secondary" size="md" className="w-full" onClick={handleLetGo} id="letgo-btn">
                       <Ban className="w-4 h-4" />
                       Let Go of Bounty
