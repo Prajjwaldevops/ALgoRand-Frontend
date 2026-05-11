@@ -73,7 +73,7 @@ export default function ForgotPasswordPage() {
           <div className="mb-6 flex justify-start">
             <Link 
               href="/auth" 
-              className="inline-flex items-center text-sm font-medium text-vault-text-muted hover:text-white transition-colors"
+              className="inline-flex items-center text-sm font-medium text-zinc-500 hover:text-white transition-colors"
             >
               <ArrowLeft size={16} className="mr-2" />
               Back to Sign In
@@ -83,28 +83,28 @@ export default function ForgotPasswordPage() {
           <h1 className="text-3xl font-bold font-[var(--font-heading)] mb-2 text-white">
             Reset Password
           </h1>
-          <p className="text-vault-text-secondary text-sm mb-8">
+          <p className="text-zinc-400 text-sm mb-8">
             {submitted ? "Enter the code sent to your email and your new password" : "Enter your email to receive a password reset code"}
           </p>
 
           <Card hover={false} className="p-8 text-left">
             {verified ? (
               <div className="text-center py-6">
-                <div className="mx-auto w-12 h-12 rounded-full bg-vault-green/20 flex items-center justify-center mb-4 text-vault-green">
+                <div className="mx-auto w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4 text-emerald-400">
                   <CheckCircle2 size={24} />
                 </div>
                 <h3 className="text-lg font-medium text-white mb-2">Password Reset</h3>
-                <p className="text-sm text-vault-text-muted">
+                <p className="text-sm text-zinc-500">
                   Your password has been reset successfully. Redirecting...
                 </p>
               </div>
             ) : submitted ? (
               <form onSubmit={handleReset} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-vault-text-muted">Verification Code</label>
+                  <label className="text-sm font-medium text-zinc-500">Verification Code</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                    className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-[#ef233c] transition-colors"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                     required
@@ -112,10 +112,10 @@ export default function ForgotPasswordPage() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-vault-text-muted">New Password</label>
+                  <label className="text-sm font-medium text-zinc-500">New Password</label>
                   <input
                     type="password"
-                    className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                    className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-[#ef233c] transition-colors"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -125,7 +125,7 @@ export default function ForgotPasswordPage() {
                 </div>
 
                 {error && (
-                  <div className="p-3 bg-vault-red/10 border border-vault-red/20 rounded-lg text-vault-red text-sm">
+                  <div className="p-3 bg-red-500/10 border border-red-800/20 rounded-lg text-red-400 text-sm">
                     {error}
                   </div>
                 )}
@@ -142,10 +142,10 @@ export default function ForgotPasswordPage() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-vault-text-muted">Email Address</label>
+                  <label className="text-sm font-medium text-zinc-500">Email Address</label>
                   <input
                     type="email"
-                    className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                    className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-[#ef233c] transition-colors"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -154,7 +154,7 @@ export default function ForgotPasswordPage() {
                 </div>
 
                 {error && (
-                  <div className="p-3 bg-vault-red/10 border border-vault-red/20 rounded-lg text-vault-red text-sm">
+                  <div className="p-3 bg-red-500/10 border border-red-800/20 rounded-lg text-red-400 text-sm">
                     {error}
                   </div>
                 )}

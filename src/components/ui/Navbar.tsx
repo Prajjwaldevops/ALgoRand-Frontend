@@ -54,26 +54,26 @@ export function Navbar() {
   }, [user]);
 
   const roleLabel = user?.role === "creator" ? "Creator" : "Freelancer";
-  const roleColor = user?.role === "creator" ? "text-vault-purple-light" : "text-vault-cyan";
+  const roleColor = "text-red-300";
 
   return (
     <>
       <nav
         id="main-navbar"
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-            ? "glass-strong shadow-lg shadow-black/20 py-3"
-            : "bg-transparent py-5"
-          }`}
+        className="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-6 px-4"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div
+          className={`max-w-5xl mx-auto flex items-center justify-between rounded-full px-6 py-3 transition-all duration-500 ${
+            scrolled
+              ? "bg-black/70 backdrop-blur-xl border border-white/10 shadow-2xl"
+              : "bg-black/40 backdrop-blur-md border border-white/5"
+          }`}
+        >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-vault-purple to-vault-cyan flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(124,92,252,0.4)] transition-shadow duration-300">
-              <Zap className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-lg font-bold font-[var(--font-heading)] tracking-tight">
-              <span className="text-vault-text">Bounty</span>
-              <span className="gradient-text">Vault</span>
+            <div className="w-5 h-5 bg-[#ef233c] rounded-sm rotate-45 group-hover:shadow-[0_0_15px_rgba(239,35,60,0.5)] transition-shadow" />
+            <span className="text-lg font-bold font-[var(--font-heading)] tracking-tight text-white">
+              BountyVault
             </span>
           </Link>
 
@@ -83,7 +83,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm text-vault-text-secondary hover:text-vault-text transition-colors rounded-lg hover:bg-white/5"
+                className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white transition-colors rounded-lg"
               >
                 {link.label}
               </Link>
@@ -94,27 +94,27 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {isConnected && accountAddress ? (
               <div
-                className="flex items-center gap-2 glass px-4 py-2 rounded-xl cursor-pointer hover:bg-white/10 transition-colors"
+                className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full cursor-pointer hover:bg-white/10 transition-colors"
                 onClick={disconnectWallet}
                 title="Click to disconnect"
               >
-                <div className="w-2 h-2 rounded-full bg-vault-green animate-pulse" />
-                <span className="text-sm text-vault-text-secondary font-mono">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-sm text-zinc-400 font-mono">
                   {accountAddress.slice(0, 4)}...{accountAddress.slice(-4)}
                 </span>
               </div>
             ) : (
-              <Button onClick={() => connectWallet()} size="sm" variant="primary" id="connect-wallet-btn">
+              <Button onClick={() => connectWallet()} size="sm" variant="secondary" id="connect-wallet-btn">
                 <Wallet className="w-4 h-4" />
-                Connect Wallet
+                Connect
               </Button>
             )}
 
             {isAuthenticated ? (
-              <div className="flex items-center gap-3 ml-2 border-l border-vault-border pl-4">
+              <div className="flex items-center gap-3 ml-2 border-l border-white/10 pl-4">
                 {/* User avatar + role badge */}
                 <Link href="/dashboard" className="flex items-center gap-2 group">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-vault-purple to-vault-cyan flex items-center justify-center text-white text-xs font-bold flex-shrink-0 group-hover:shadow-[0_0_12px_rgba(124,92,252,0.3)] transition-shadow">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#ef233c] to-red-800 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 group-hover:shadow-[0_0_12px_rgba(239,35,60,0.4)] transition-shadow">
                     {user?.avatar_url ? (
                       <img src={user.avatar_url} alt="" className="w-full h-full rounded-lg object-cover" />
                     ) : (
@@ -122,7 +122,7 @@ export function Navbar() {
                     )}
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium text-vault-text leading-tight">
+                    <span className="text-sm font-medium text-white leading-tight">
                       {user?.first_name || user?.username || "Loading..."}
                     </span>
                     <span className={`text-[9px] uppercase tracking-wider font-medium ${roleColor} leading-tight`}>
@@ -136,9 +136,14 @@ export function Navbar() {
               </div>
             ) : (
               <Link href="/auth">
-                <Button size="sm" variant="ghost">
-                  Sign In
-                </Button>
+                <button className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-white/5 px-6 py-2 transition-transform active:scale-95">
+                  <span className="absolute inset-0 border border-white/10 rounded-full" />
+                  <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ef233c_100%)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="absolute inset-[1px] rounded-full bg-black" />
+                  <span className="relative z-10 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white">
+                    Sign In
+                  </span>
+                </button>
               </Link>
             )}
           </div>
@@ -147,7 +152,7 @@ export function Navbar() {
           <button
             id="mobile-menu-btn"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 text-vault-text-secondary hover:text-vault-text transition-colors"
+            className="md:hidden p-2 text-zinc-400 hover:text-white transition-colors"
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -162,7 +167,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 pt-20 glass-strong md:hidden"
+            className="fixed inset-0 z-40 pt-24 bg-black/95 backdrop-blur-xl md:hidden"
           >
             <div className="flex flex-col items-center gap-4 p-8">
               {navLinks.map((link) => (
@@ -170,7 +175,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-xl font-medium text-vault-text-secondary hover:text-vault-text transition-colors py-3"
+                  className="text-xl font-medium text-zinc-400 hover:text-white transition-colors py-3"
                 >
                   {link.label}
                 </Link>
@@ -180,18 +185,18 @@ export function Navbar() {
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileOpen(false)}
-                  className="text-xl font-medium text-vault-text-secondary hover:text-vault-text transition-colors py-3 flex items-center gap-2"
+                  className="text-xl font-medium text-zinc-400 hover:text-white transition-colors py-3 flex items-center gap-2"
                 >
                   <LayoutDashboard className="w-5 h-5" /> Dashboard
                 </Link>
               )}
 
-              <div className="w-full h-px bg-vault-border my-4" />
+              <div className="w-full h-px bg-white/10 my-4" />
 
               {/* User info on mobile */}
               {user && (
-                <div className="flex items-center gap-3 mb-4 glass px-4 py-3 rounded-xl w-full justify-center">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-vault-purple to-vault-cyan flex items-center justify-center text-white text-sm font-bold">
+                <div className="flex items-center gap-3 mb-4 bg-white/5 border border-white/10 px-4 py-3 rounded-xl w-full justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#ef233c] to-red-800 flex items-center justify-center text-white text-sm font-bold">
                     {(user.first_name || user.username)?.charAt(0).toUpperCase() || "U"}
                   </div>
                   <div>
@@ -203,11 +208,11 @@ export function Navbar() {
 
               {isConnected && accountAddress ? (
                 <div
-                  className="flex items-center justify-center gap-2 glass px-6 py-3 rounded-xl w-full cursor-pointer"
+                  className="flex items-center justify-center gap-2 bg-white/5 border border-white/10 px-6 py-3 rounded-xl w-full cursor-pointer"
                   onClick={() => { disconnectWallet(); setMobileOpen(false); }}
                 >
-                  <div className="w-2 h-2 rounded-full bg-vault-green animate-pulse" />
-                  <span className="text-sm text-vault-text-secondary font-mono">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-sm text-zinc-400 font-mono">
                     {accountAddress.slice(0, 6)}...{accountAddress.slice(-4)}
                   </span>
                 </div>
@@ -223,7 +228,7 @@ export function Navbar() {
                 </Button>
               ) : (
                 <Link href="/auth" className="w-full" onClick={() => setMobileOpen(false)}>
-                  <Button variant="secondary" size="lg" className="w-full">
+                  <Button variant="primary" size="lg" className="w-full">
                     Sign In
                   </Button>
                 </Link>

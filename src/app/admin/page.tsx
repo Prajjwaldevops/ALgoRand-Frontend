@@ -16,8 +16,8 @@ export default function AdminIndexPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-vault-bg">
-      <div className="w-8 h-8 border-2 border-vault-purple border-t-transparent rounded-full animate-spin" />
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      <div className="w-8 h-8 border-2 border-[#ef233c] border-t-transparent rounded-full animate-spin" />
     </div>
   );
 }

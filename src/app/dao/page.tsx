@@ -56,17 +56,17 @@ export default function DAOCourtPage() {
         {/* Hero */}
         <ScrollReveal>
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vault-purple/10 border border-vault-purple/20 mb-6">
-              <Scale className="w-4 h-4 text-vault-purple" />
-              <span className="text-sm text-vault-purple font-medium">Decentralized Dispute Resolution</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#ef233c]/10 border border-[#ef233c]/20 mb-6">
+              <Scale className="w-4 h-4 text-[#ef233c]" />
+              <span className="text-sm text-[#ef233c] font-medium">Decentralized Dispute Resolution</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-heading font-bold mb-4">
-              <span className="bg-gradient-to-r from-vault-purple via-vault-cyan to-vault-purple bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-5xl font-[var(--font-heading)] font-bold mb-4">
+              <span className="text-[#ef233c]">
                 DAO Court
               </span>
             </h1>
-            <p className="text-lg text-vault-text-secondary max-w-2xl mx-auto">
-              When freelancers and creators disagree, the community decides. 
+            <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              When freelancers and creators disagree, the community decides.
               Vote on active disputes to help resolve bounty conflicts fairly.
             </p>
           </div>
@@ -75,21 +75,21 @@ export default function DAOCourtPage() {
         {/* Stats bar */}
         <ScrollReveal delay={100}>
           <div className="grid grid-cols-3 gap-4 mb-10">
-            <div className="glass-card rounded-xl p-4 text-center">
-              <p className="text-2xl font-heading font-bold text-vault-purple">{disputes.length}</p>
-              <p className="text-xs text-vault-text-muted mt-1">Active Disputes</p>
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-4 text-center">
+              <p className="text-2xl font-[var(--font-heading)] font-bold text-[#ef233c]">{disputes.length}</p>
+              <p className="text-xs text-zinc-500 mt-1">Active Disputes</p>
             </div>
-            <div className="glass-card rounded-xl p-4 text-center">
-              <p className="text-2xl font-heading font-bold text-vault-cyan">
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-4 text-center">
+              <p className="text-2xl font-[var(--font-heading)] font-bold text-white">
                 {disputes.reduce((a, d) => a + d.votes.total, 0)}
               </p>
-              <p className="text-xs text-vault-text-muted mt-1">Total Votes Cast</p>
+              <p className="text-xs text-zinc-500 mt-1">Total Votes Cast</p>
             </div>
-            <div className="glass-card rounded-xl p-4 text-center">
-              <p className="text-2xl font-heading font-bold text-vault-green">
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-4 text-center">
+              <p className="text-2xl font-[var(--font-heading)] font-bold text-emerald-400">
                 {disputes.reduce((a, d) => a + d.bounty.reward_algo, 0).toFixed(1)} Ⱥ
               </p>
-              <p className="text-xs text-vault-text-muted mt-1">ALGO at Stake</p>
+              <p className="text-xs text-zinc-500 mt-1">ALGO at Stake</p>
             </div>
           </div>
         </ScrollReveal>
@@ -97,16 +97,16 @@ export default function DAOCourtPage() {
         {/* Disputes list */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-2 border-vault-purple border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#ef233c] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : disputes.length === 0 ? (
           <ScrollReveal>
             <div className="text-center py-20">
-              <Shield className="w-16 h-16 mx-auto text-vault-text-muted mb-4 opacity-40" />
-              <h2 className="text-xl font-heading font-semibold text-vault-text mb-2">
+              <Shield className="w-16 h-16 mx-auto text-zinc-700 mb-4" />
+              <h2 className="text-xl font-[var(--font-heading)] font-semibold text-white mb-2">
                 No Active Disputes
               </h2>
-              <p className="text-vault-text-secondary max-w-md mx-auto">
+              <p className="text-zinc-400 max-w-md mx-auto">
                 The DAO Court is currently at peace. When a freelancer raises a dispute,
                 it will appear here for community voting.
               </p>
@@ -121,63 +121,63 @@ export default function DAOCourtPage() {
 
               return (
                 <ScrollReveal key={dispute.id} delay={i * 100}>
-                  <div className="glass-card rounded-2xl p-6 hover:border-vault-purple/30 transition-all duration-500 group">
+                  <div className="border border-white/10 bg-black rounded-xl p-6 hover:border-[#ef233c]/30 transition-all duration-500 group">
                     {/* Header */}
                     <div className="flex items-start justify-between mb-5">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="font-mono text-sm text-vault-purple font-medium">
+                          <span className="font-mono text-sm text-[#ef233c] font-medium">
                             {dispute.dispute_id}
                           </span>
                           {dispute.voting_active && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-vault-green/15 text-vault-green text-xs font-medium animate-pulse">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-xs font-medium animate-pulse">
                               <Flame className="w-3 h-3" />
                               Live
                             </span>
                           )}
                         </div>
-                        <h3 className="text-lg font-heading font-semibold text-vault-text">
+                        <h3 className="text-lg font-[var(--font-heading)] font-semibold text-white">
                           {dispute.bounty.title}
                         </h3>
                       </div>
                       <div className="text-right">
-                        <p className="text-xl font-mono font-bold text-vault-green">
+                        <p className="text-xl font-mono font-bold text-emerald-400">
                           {dispute.bounty.reward_algo.toFixed(2)} Ⱥ
                         </p>
-                        <p className="text-xs text-vault-text-muted mt-1">at stake</p>
+                        <p className="text-xs text-zinc-500 mt-1">at stake</p>
                       </div>
                     </div>
 
                     {/* Parties */}
                     <div className="grid grid-cols-2 gap-4 mb-5">
-                      <div className="bg-vault-cyan/5 border border-vault-cyan/10 rounded-xl p-3">
-                        <p className="text-xs text-vault-text-muted mb-1">Creator</p>
-                        <p className="text-sm font-medium text-vault-text">{dispute.creator_name}</p>
+                      <div className="bg-white/5 border border-white/5 rounded-xl p-3">
+                        <p className="text-xs text-zinc-500 mb-1">Creator</p>
+                        <p className="text-sm font-medium text-white">{dispute.creator_name}</p>
                       </div>
-                      <div className="bg-vault-purple/5 border border-vault-purple/10 rounded-xl p-3">
-                        <p className="text-xs text-vault-text-muted mb-1">Freelancer</p>
-                        <p className="text-sm font-medium text-vault-text">{dispute.freelancer_name}</p>
+                      <div className="bg-white/5 border border-white/5 rounded-xl p-3">
+                        <p className="text-xs text-zinc-500 mb-1">Freelancer</p>
+                        <p className="text-sm font-medium text-white">{dispute.freelancer_name}</p>
                       </div>
                     </div>
 
                     {/* Vote Progress */}
                     <div className="mb-5">
-                      <div className="flex items-center justify-between text-xs text-vault-text-muted mb-2">
+                      <div className="flex items-center justify-between text-xs text-zinc-500 mb-2">
                         <span>Creator: {dispute.votes.creator} votes ({creatorPct.toFixed(0)}%)</span>
                         <span>Freelancer: {dispute.votes.freelancer} votes ({freelancerPct.toFixed(0)}%)</span>
                       </div>
-                      <div className="h-3 bg-vault-bg rounded-full overflow-hidden flex">
+                      <div className="h-3 bg-zinc-900 rounded-full overflow-hidden flex">
                         <div
-                          className="bg-gradient-to-r from-vault-cyan to-vault-cyan/70 transition-all duration-500 rounded-l-full"
+                          className="bg-gradient-to-r from-[#ef233c] to-[#ef233c]/70 transition-all duration-500 rounded-l-full"
                           style={{ width: `${creatorPct}%` }}
                         />
                         <div
-                          className="bg-gradient-to-r from-vault-purple/70 to-vault-purple transition-all duration-500 rounded-r-full"
+                          className="bg-gradient-to-r from-white/20 to-white/10 transition-all duration-500 rounded-r-full"
                           style={{ width: `${freelancerPct}%` }}
                         />
                       </div>
                       <div className="flex items-center justify-center mt-2">
-                        <span className="text-xs text-vault-text-muted">
+                        <span className="text-xs text-zinc-500">
                           <Users className="w-3 h-3 inline mr-1" />
                           {totalVotes} total vote{totalVotes !== 1 ? "s" : ""}
                         </span>
@@ -187,16 +187,16 @@ export default function DAOCourtPage() {
                     {/* Footer */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 text-sm">
-                        <Timer className="w-4 h-4 text-vault-amber" />
+                        <Timer className="w-4 h-4 text-amber-400" />
                         <span className={`font-medium ${
-                          dispute.voting_active ? "text-vault-amber" : "text-vault-text-muted"
+                          dispute.voting_active ? "text-amber-400" : "text-zinc-500"
                         }`}>
                           {getTimeRemaining(dispute.voting_deadline)}
                         </span>
                       </div>
                       <Link
                         href={`/dao/${dispute.id}`}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-vault-purple/10 text-vault-purple text-sm font-medium hover:bg-vault-purple/20 transition-colors group-hover:translate-x-1 duration-300"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#ef233c]/10 text-[#ef233c] text-sm font-medium hover:bg-[#ef233c]/20 transition-colors group-hover:translate-x-1 duration-300"
                       >
                         {dispute.voting_active ? "Vote Now" : "View Details"}
                         <ArrowRight className="w-4 h-4" />
@@ -211,35 +211,35 @@ export default function DAOCourtPage() {
 
         {/* How it Works */}
         <ScrollReveal delay={200}>
-          <div className="mt-16 glass-card rounded-2xl p-8">
-            <h2 className="text-xl font-heading font-bold text-vault-text mb-6 text-center">
+          <div className="mt-16 border border-white/10 bg-zinc-900/50 rounded-xl p-8">
+            <h2 className="text-xl font-[var(--font-heading)] font-bold text-white mb-6 text-center">
               How DAO Court Works
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="w-12 h-12 rounded-2xl bg-vault-purple/10 flex items-center justify-center mx-auto mb-3">
-                  <Shield className="w-6 h-6 text-vault-purple" />
+                <div className="w-12 h-12 rounded-xl bg-[#ef233c]/10 border border-[#ef233c]/10 flex items-center justify-center mx-auto mb-3">
+                  <Shield className="w-6 h-6 text-[#ef233c]" />
                 </div>
-                <h3 className="font-semibold text-vault-text mb-1">1. Dispute Raised</h3>
-                <p className="text-sm text-vault-text-secondary">
+                <h3 className="font-semibold text-white mb-1">1. Dispute Raised</h3>
+                <p className="text-sm text-zinc-400">
                   Freelancer writes a 300+ word description with full submission history
                 </p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 rounded-2xl bg-vault-cyan/10 flex items-center justify-center mx-auto mb-3">
-                  <Users className="w-6 h-6 text-vault-cyan" />
+                <div className="w-12 h-12 rounded-xl bg-[#ef233c]/10 border border-[#ef233c]/10 flex items-center justify-center mx-auto mb-3">
+                  <Users className="w-6 h-6 text-[#ef233c]" />
                 </div>
-                <h3 className="font-semibold text-vault-text mb-1">2. Community Votes</h3>
-                <p className="text-sm text-vault-text-secondary">
+                <h3 className="font-semibold text-white mb-1">2. Community Votes</h3>
+                <p className="text-sm text-zinc-400">
                   48-hour voting window. Uninvolved community members cast on-chain votes
                 </p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 rounded-2xl bg-vault-green/10 flex items-center justify-center mx-auto mb-3">
-                  <CheckCircle className="w-6 h-6 text-vault-green" />
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/10 flex items-center justify-center mx-auto mb-3">
+                  <CheckCircle className="w-6 h-6 text-emerald-400" />
                 </div>
-                <h3 className="font-semibold text-vault-text mb-1">3. Resolution</h3>
-                <p className="text-sm text-vault-text-secondary">
+                <h3 className="font-semibold text-white mb-1">3. Resolution</h3>
+                <p className="text-sm text-zinc-400">
                   After deadline, anyone can finalize. Ties favor the creator. ALGO released to winner
                 </p>
               </div>

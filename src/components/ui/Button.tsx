@@ -31,13 +31,13 @@ export function Button({
 
   const variants = {
     primary:
-      "bg-gradient-to-r from-vault-purple to-vault-cyan text-white hover:shadow-[0_0_30px_rgba(124,92,252,0.4)] hover:scale-[1.02] active:scale-[0.98]",
+      "bg-[#ef233c] text-white hover:bg-red-700 hover:shadow-[0_0_30px_rgba(239,35,60,0.3)] hover:scale-[1.02] active:scale-[0.98]",
     secondary:
-      "glass-card text-vault-text hover:border-vault-purple/40 hover:shadow-[0_0_20px_rgba(124,92,252,0.15)]",
+      "bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-white/20 hover:shadow-[0_0_20px_rgba(239,35,60,0.1)]",
     ghost:
-      "text-vault-text-secondary hover:text-vault-text hover:bg-white/5 rounded-lg",
+      "text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg",
     danger:
-      "bg-vault-red/10 text-vault-red border border-vault-red/20 hover:bg-vault-red/20 hover:border-vault-red/40",
+      "bg-red-900/20 text-red-400 border border-red-800/40 hover:bg-red-900/30 hover:border-red-700/50",
   };
 
   const sizes = {

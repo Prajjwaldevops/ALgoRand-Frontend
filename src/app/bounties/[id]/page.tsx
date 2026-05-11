@@ -133,10 +133,10 @@ export default function BountyDetailPage() {
       <div className="min-h-screen pt-24 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="animate-pulse space-y-6">
-            <div className="h-8 bg-vault-text-muted/10 rounded w-1/3" />
-            <div className="h-6 bg-vault-text-muted/10 rounded w-2/3" />
-            <div className="h-40 bg-vault-text-muted/10 rounded-2xl" />
-            <div className="h-60 bg-vault-text-muted/10 rounded-2xl" />
+            <div className="h-8 bg-white/5 rounded w-1/3" />
+            <div className="h-6 bg-white/5 rounded w-2/3" />
+            <div className="h-40 bg-white/5 rounded-xl" />
+            <div className="h-60 bg-white/5 rounded-xl" />
           </div>
         </div>
       </div>
@@ -147,8 +147,8 @@ export default function BountyDetailPage() {
     return (
       <div className="min-h-screen pt-24 pb-20 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-semibold mb-2">Bounty not found</h2>
-          <p className="text-vault-text-secondary mb-4">
+          <h2 className="text-xl font-semibold mb-2 text-white">Bounty not found</h2>
+          <p className="text-zinc-400 mb-4">
             This bounty may not exist or the backend is not running.
           </p>
           <Link href="/bounties">
@@ -166,13 +166,15 @@ export default function BountyDetailPage() {
   const hasApprovedAcceptance = myAcceptance?.status === "approved";
   const canSubmitWork = isFreelancer && hasApprovedAcceptance && (bounty.status === "in_progress" || bounty.status === "open");
 
+  const inputClass = "w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#ef233c]/40 resize-none h-20";
+
   return (
     <div className="min-h-screen pt-24 pb-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Back Link */}
         <Link
           href="/bounties"
-          className="inline-flex items-center gap-1.5 text-sm text-vault-text-secondary hover:text-vault-text transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-white transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Bounties
@@ -185,10 +187,10 @@ export default function BountyDetailPage() {
               <Badge status={bounty.status} />
               {isExpired && <Badge status="expired" />}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-[var(--font-heading)] mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold font-[var(--font-heading)] mb-2 text-white">
               {bounty.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-vault-text-secondary">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-400">
               <span className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4" />
                 {formatDeadline(bounty.deadline)}
@@ -207,16 +209,16 @@ export default function BountyDetailPage() {
             {/* Description */}
             <ScrollReveal>
               <Card hover={false} className="p-6">
-                <h2 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-vault-purple-light" />
+                <h2 className="text-sm font-semibold mb-3 flex items-center gap-2 text-white">
+                  <FileText className="w-4 h-4 text-[#ef233c]" />
                   Description
                 </h2>
-                <p className="text-sm text-vault-text-secondary leading-relaxed whitespace-pre-wrap">
+                <p className="text-sm text-zinc-400 leading-relaxed whitespace-pre-wrap">
                   {bounty.description}
                 </p>
 
                 {(bounty.tags ?? []).length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-vault-border">
+                  <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-white/10">
                     {(bounty.tags ?? []).map((tag) => (
                       <Badge key={tag} tag={tag} />
                     ))}
@@ -228,20 +230,20 @@ export default function BountyDetailPage() {
             {/* Submissions Leaderboard */}
             <ScrollReveal delay={0.1}>
               <Card hover={false} className="p-6">
-                <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
-                  <Users className="w-4 h-4 text-vault-cyan" />
+                <h2 className="text-sm font-semibold mb-4 flex items-center gap-2 text-white">
+                  <Users className="w-4 h-4 text-[#ef233c]" />
                   Submissions ({submissions.length})
                 </h2>
 
                 {submissions.length === 0 ? (
-                  <p className="text-sm text-vault-text-muted text-center py-8">
+                  <p className="text-sm text-zinc-600 text-center py-8">
                     No submissions yet. {isFreelancer && hasApprovedAcceptance ? "Submit your work!" : ""}
                   </p>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="text-xs text-vault-text-muted border-b border-vault-border">
+                        <tr className="text-xs text-zinc-500 border-b border-white/10">
                           <th className="text-left py-2 font-medium">Worker</th>
                           <th className="text-left py-2 font-medium">Rep</th>
                           <th className="text-left py-2 font-medium">Status</th>
@@ -251,14 +253,14 @@ export default function BountyDetailPage() {
                       </thead>
                       <tbody>
                         {submissions.map((sub) => (
-                          <tr key={sub.id} className="border-b border-vault-border/50">
+                          <tr key={sub.id} className="border-b border-white/5">
                             <td className="py-3">
-                              <span className="font-medium">
+                              <span className="font-medium text-white">
                                 {sub.freelancer?.username || truncateAddress(sub.freelancer_id)}
                               </span>
                             </td>
                             <td className="py-3">
-                              <span className="flex items-center gap-1 text-vault-amber">
+                              <span className="flex items-center gap-1 text-amber-400">
                                 <Star className="w-3 h-3" />
                                 {sub.freelancer?.reputation_score || 0}
                               </span>
@@ -272,7 +274,7 @@ export default function BountyDetailPage() {
                                   href={sub.mega_nz_link}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-vault-cyan hover:underline flex items-center gap-1"
+                                  className="text-[#ef233c] hover:underline flex items-center gap-1"
                                 >
                                   Mega.nz <ExternalLink className="w-3 h-3" />
                                 </a>
@@ -283,14 +285,14 @@ export default function BountyDetailPage() {
                                 <div className="flex items-center justify-end gap-1.5">
                                   <button
                                     onClick={() => handleApprove(sub.id, sub.freelancer_id)}
-                                    className="p-1.5 rounded-lg bg-vault-green/10 text-vault-green hover:bg-vault-green/20 transition-colors"
+                                    className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors"
                                     title="Approve"
                                   >
                                     <CheckCircle className="w-4 h-4" />
                                   </button>
                                   <button
                                     onClick={() => handleReject(sub.id)}
-                                    className="p-1.5 rounded-lg bg-vault-red/10 text-vault-red hover:bg-vault-red/20 transition-colors"
+                                    className="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
                                     title="Reject"
                                   >
                                     <XCircle className="w-4 h-4" />
@@ -313,13 +315,13 @@ export default function BountyDetailPage() {
             {/* Reward Card */}
             <ScrollReveal direction="right">
               <Card hover={false} className="p-6 text-center gradient-border">
-                <p className="text-xs text-vault-text-muted mb-1">Bounty Reward</p>
+                <p className="text-xs text-zinc-500 mb-1">Bounty Reward</p>
                 <div className="text-3xl font-bold font-[var(--font-heading)] gradient-text mb-1">
                   {formatAlgo(bounty.reward_algo)} ALGO
                 </div>
                 {bounty.app_id && (
-                  <p className="text-xs text-vault-green flex items-center justify-center gap-1 mt-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-vault-green" />
+                  <p className="text-xs text-emerald-400 flex items-center justify-center gap-1 mt-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     Escrow Active (App #{bounty.app_id})
                   </p>
                 )}
@@ -345,14 +347,14 @@ export default function BountyDetailPage() {
                       </Button>
                     ) : (
                       <div className="space-y-3">
-                        <p className="text-xs text-vault-text-secondary">
+                        <p className="text-xs text-zinc-400">
                           Send a message to the creator explaining why you&apos;re the right fit:
                         </p>
                         <textarea
                           value={acceptMessage}
                           onChange={(e) => setAcceptMessage(e.target.value)}
                           placeholder="I'd love to work on this bounty because..."
-                          className="w-full px-3 py-2 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text placeholder:text-vault-text-muted focus:outline-none focus:border-vault-purple/40 resize-none h-20"
+                          className={inputClass}
                           id="accept-message"
                         />
                         <div className="flex gap-2">
@@ -382,9 +384,9 @@ export default function BountyDetailPage() {
                 {/* Acceptance Status */}
                 {myAcceptance && (
                   <div className={`p-3 rounded-xl text-sm ${
-                    myAcceptance.status === "pending" ? "bg-vault-amber/10 text-vault-amber" :
-                    myAcceptance.status === "approved" ? "bg-vault-green/10 text-vault-green" :
-                    "bg-vault-red/10 text-vault-red"
+                    myAcceptance.status === "pending" ? "bg-amber-500/10 text-amber-400" :
+                    myAcceptance.status === "approved" ? "bg-emerald-500/10 text-emerald-400" :
+                    "bg-red-500/10 text-red-400"
                   }`}>
                     <div className="flex items-center gap-2 font-medium">
                       {myAcceptance.status === "pending" && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -418,14 +420,14 @@ export default function BountyDetailPage() {
 
                 {/* Freelancer info: need acceptance first */}
                 {isFreelancer && bounty.status === "open" && !myAcceptance && !canAccept && (
-                  <p className="text-xs text-vault-text-muted text-center py-2">
+                  <p className="text-xs text-zinc-600 text-center py-2">
                     You need to accept this bounty before submitting work.
                   </p>
                 )}
 
                 {/* Dispute & Let Go (Freelancer only — requires at least 1 submission) */}
                 {(bounty.status === "in_progress" || bounty.status === "submitted" || bounty.status === "expired") && user?.role === "freelancer" && submissions.length >= 1 && (
-                  <div className="space-y-2 pt-2 border-t border-vault-border/50">
+                  <div className="space-y-2 pt-2 border-t border-white/10">
                     <Link href={`/bounties/${id}/dispute`} className="w-full">
                       <Button variant="danger" size="md" className="w-full" id="dispute-btn">
                         <AlertTriangle className="w-4 h-4" />
@@ -458,30 +460,30 @@ export default function BountyDetailPage() {
             {/* Info */}
             <ScrollReveal direction="right" delay={0.2}>
               <Card hover={false} className="p-5">
-                <h3 className="text-xs font-semibold text-vault-text-muted mb-3 uppercase tracking-wider">
+                <h3 className="text-xs font-semibold text-zinc-500 mb-3 uppercase tracking-wider">
                   Details
                 </h3>
                 <div className="space-y-2.5 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-vault-text-muted">Status</span>
-                    <span>{statusLabel(bounty.status)}</span>
+                    <span className="text-zinc-500">Status</span>
+                    <span className="text-white">{statusLabel(bounty.status)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-vault-text-muted">Deadline</span>
-                    <span>{new Date(bounty.deadline).toLocaleDateString()}</span>
+                    <span className="text-zinc-500">Deadline</span>
+                    <span className="text-white">{new Date(bounty.deadline).toLocaleDateString()}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-vault-text-muted">Max Subs</span>
-                    <span>{bounty.max_submissions}</span>
+                    <span className="text-zinc-500">Max Subs</span>
+                    <span className="text-white">{bounty.max_submissions}</span>
                   </div>
                   {bounty.terms_ipfs_cid && (
                     <div className="flex justify-between">
-                      <span className="text-vault-text-muted">Terms</span>
+                      <span className="text-zinc-500">Terms</span>
                       <a
                         href={`https://gateway.pinata.cloud/ipfs/${bounty.terms_ipfs_cid}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-vault-cyan hover:underline flex items-center gap-1"
+                        className="text-[#ef233c] hover:underline flex items-center gap-1"
                       >
                         IPFS <ExternalLink className="w-3 h-3" />
                       </a>
@@ -489,8 +491,8 @@ export default function BountyDetailPage() {
                   )}
                   {bounty.escrow_txn_id && (
                     <div className="flex justify-between">
-                      <span className="text-vault-text-muted">Escrow Tx</span>
-                      <span className="font-mono text-xs">
+                      <span className="text-zinc-500">Escrow Tx</span>
+                      <span className="font-mono text-xs text-white">
                         {truncateAddress(bounty.escrow_txn_id, 6)}
                       </span>
                     </div>

@@ -68,12 +68,12 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
   if (timedOut && !user) {
     return (
       <div className="min-h-screen pt-24 pb-20 flex items-center justify-center">
-        <div className="glass-card p-10 text-center max-w-md rounded-2xl">
-          <AlertCircle className="w-12 h-12 text-vault-amber mx-auto mb-4" />
-          <h2 className="text-xl font-bold font-[var(--font-heading)] mb-2">
+        <div className="border border-white/10 bg-zinc-900/50 backdrop-blur-sm p-10 text-center max-w-md rounded-xl">
+          <AlertCircle className="w-12 h-12 text-amber-400 mx-auto mb-4" />
+          <h2 className="text-xl font-bold font-[var(--font-heading)] mb-2 text-white">
             Dashboard Loading Issue
           </h2>
-          <p className="text-sm text-vault-text-secondary mb-6">
+          <p className="text-sm text-zinc-400 mb-6">
             We couldn&apos;t load your profile. This may be because the backend is
             not running or your session expired.
           </p>
@@ -83,14 +83,14 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
                 setTimedOut(false);
                 refreshUser();
               }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-vault-purple text-white text-sm font-medium hover:bg-vault-purple/90 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#ef233c] text-white text-sm font-medium hover:bg-red-700 transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
               Retry
             </button>
             <button
               onClick={() => router.replace("/auth")}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 text-vault-text-secondary text-sm font-medium hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 text-zinc-400 text-sm font-medium hover:bg-white/10 transition-colors"
             >
               Sign In Again
             </button>
@@ -106,13 +106,13 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
       <div className="min-h-screen pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="animate-pulse space-y-6">
-            <div className="h-36 bg-vault-text-muted/10 rounded-3xl" />
+            <div className="h-36 bg-white/5 rounded-xl" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-28 bg-vault-text-muted/10 rounded-2xl" />
+                <div key={i} className="h-28 bg-white/5 rounded-xl" />
               ))}
             </div>
-            <div className="h-64 bg-vault-text-muted/10 rounded-2xl" />
+            <div className="h-64 bg-white/5 rounded-xl" />
           </div>
         </div>
       </div>
@@ -123,12 +123,12 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
   if (!user) {
     return (
       <div className="min-h-screen pt-24 pb-20 flex items-center justify-center">
-        <div className="glass-card p-10 text-center max-w-md rounded-2xl">
-          <User className="w-12 h-12 text-vault-text-muted mx-auto mb-4" />
-          <h2 className="text-xl font-bold font-[var(--font-heading)] mb-2">
+        <div className="border border-white/10 bg-zinc-900/50 backdrop-blur-sm p-10 text-center max-w-md rounded-xl">
+          <User className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+          <h2 className="text-xl font-bold font-[var(--font-heading)] mb-2 text-white">
             Sign in Required
           </h2>
-          <p className="text-sm text-vault-text-secondary mb-6">
+          <p className="text-sm text-zinc-400 mb-6">
             You need to sign in to access this page.
           </p>
         </div>

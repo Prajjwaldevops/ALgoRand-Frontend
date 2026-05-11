@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 interface CardProps {
   children: ReactNode;
   className?: string;
-  glow?: "purple" | "cyan" | "magenta" | "none";
+  glow?: "purple" | "cyan" | "magenta" | "red" | "none";
   hover?: boolean;
   onClick?: () => void;
   id?: string;
@@ -21,9 +21,10 @@ export function Card({
   id,
 }: CardProps) {
   const glowStyles = {
-    purple: "hover:shadow-[0_0_40px_rgba(124,92,252,0.12)]",
-    cyan: "hover:shadow-[0_0_40px_rgba(34,211,238,0.12)]",
-    magenta: "hover:shadow-[0_0_40px_rgba(224,64,224,0.12)]",
+    purple: "hover:shadow-[0_0_30px_rgba(239,35,60,0.1)]",
+    cyan: "hover:shadow-[0_0_30px_rgba(239,35,60,0.1)]",
+    magenta: "hover:shadow-[0_0_30px_rgba(239,35,60,0.1)]",
+    red: "hover:shadow-[0_0_30px_rgba(239,35,60,0.1)]",
     none: "",
   };
 
@@ -32,8 +33,8 @@ export function Card({
       id={id}
       onClick={onClick}
       className={cn(
-        "glass-card p-6",
-        hover && "cursor-pointer",
+        "border border-white/10 bg-zinc-900/50 backdrop-blur-sm rounded-xl transition-all duration-400 p-6",
+        hover && "cursor-pointer hover:border-white/20 hover:-translate-y-0.5",
         glowStyles[glow],
         className
       )}

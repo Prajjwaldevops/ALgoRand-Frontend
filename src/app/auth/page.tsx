@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { authApi, Profile } from "@/lib/api";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-export default function AuthPage() {
+function AuthPageContent() {
   const { isSignedIn, isLoaded: clerkLoaded } = useUser();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect_url") || "/dashboard";
   const { user: authUser, loading: profileLoading, refreshUser, setUserDirect } = useAuth();
   const clerk = useClerk();
 
@@ -41,7 +42,7 @@ export default function AuthPage() {
   useEffect(() => {
     if (!clerkLoaded || verifying || verifying2FA) return;
     if (isSignedIn && !profileLoading && authUser) {
-      router.replace("/dashboard");
+      router.replace(redirectUrl);
     }
   }, [clerkLoaded, isSignedIn, profileLoading, authUser, verifying, verifying2FA, router]);
 
@@ -70,13 +71,7 @@ export default function AuthPage() {
 
         if (result.status === "complete") {
           await clerk.setActive({ session: result.createdSessionId });
-          // Do NOT call refreshUser() here — Clerk's JWT isn't immediately
-          // available via getToken() right after setActive(), so it returns
-          // null/stale → backend 401/403 → user=null → ProtectedRoute bounces
-          // to /auth (the flicker bug).
-          // AuthContext's useEffect watches clerkUser and fires refreshUser()
-          // automatically once Clerk fully propagates the new session.
-          router.replace("/dashboard");
+          router.replace(redirectUrl);
         } else if (result.status === "needs_second_factor") {
           // Prepare the second factor — this triggers the OTP email delivery
           const secondFactors = result.supportedSecondFactors || [];
@@ -204,7 +199,7 @@ export default function AuthPage() {
 
       if (result.status === "complete") {
         await clerk.setActive({ session: result.createdSessionId });
-        router.replace("/dashboard");
+        router.replace(redirectUrl);
       } else {
         console.error("2FA verification incomplete", result);
         setError("Verification failed, try again.");
@@ -246,22 +241,25 @@ export default function AuthPage() {
     }
   };
 
+  // Shared input class
+  const inputClass = "w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-[#ef233c] transition-colors placeholder:text-zinc-600";
+
   if (verifying2FA) {
     return (
       <div className="min-h-screen pt-32 pb-20 flex items-center justify-center">
         <div className="max-w-md w-full px-4 text-center">
           <ScrollReveal>
-            <h1 className="text-3xl font-bold mb-2 text-white">Two-Factor Authentication</h1>
-            <p className="text-vault-text-secondary text-sm mb-8">
+            <h1 className="text-3xl font-bold mb-2 text-white font-[var(--font-heading)]">Two-Factor Authentication</h1>
+            <p className="text-zinc-400 text-sm mb-8">
               Enter the verification code sent to your email or from your authenticator app
             </p>
-            <Card hover={false} className="p-8 text-left">
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-8 text-left">
               <form onSubmit={handleVerify2FA} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-vault-text-muted">Authentication Code</label>
+                  <label className="text-sm font-medium text-zinc-500">Authentication Code</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                    className={inputClass}
                     value={code2FA}
                     onChange={(e) => setCode2FA(e.target.value)}
                     placeholder="Enter 6-digit code"
@@ -270,7 +268,7 @@ export default function AuthPage() {
                   />
                 </div>
                 {error && (
-                  <div className="p-3 bg-vault-red/10 border border-vault-red/20 rounded-lg text-vault-red text-sm">
+                  <div className="p-3 bg-red-900/20 border border-red-800/30 rounded-lg text-red-400 text-sm">
                     {error}
                   </div>
                 )}
@@ -280,14 +278,14 @@ export default function AuthPage() {
                 <div className="mt-4 flex items-center justify-between">
                   <button
                     type="button"
-                    className="text-sm text-vault-purple-light hover:underline font-medium"
+                    className="text-sm text-[#ef233c] hover:underline font-medium"
                     onClick={handleResend2FA}
                   >
                     Resend Code
                   </button>
                   <button
                     type="button"
-                    className="text-sm text-vault-text-muted hover:text-white transition-colors"
+                    className="text-sm text-zinc-500 hover:text-white transition-colors"
                     onClick={() => {
                       setVerifying2FA(false);
                       setError(null);
@@ -298,7 +296,7 @@ export default function AuthPage() {
                   </button>
                 </div>
               </form>
-            </Card>
+            </div>
           </ScrollReveal>
         </div>
       </div>
@@ -310,24 +308,24 @@ export default function AuthPage() {
       <div className="min-h-screen pt-32 pb-20 flex items-center justify-center">
         <div className="max-w-md w-full px-4 text-center">
           <ScrollReveal>
-            <h1 className="text-3xl font-bold mb-2 text-white">Verify Email</h1>
-            <p className="text-vault-text-secondary text-sm mb-8">
+            <h1 className="text-3xl font-bold mb-2 text-white font-[var(--font-heading)]">Verify Email</h1>
+            <p className="text-zinc-400 text-sm mb-8">
               We sent a verification code to {email}
             </p>
-            <Card hover={false} className="p-8 text-left">
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-8 text-left">
               <form onSubmit={handleVerify} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-vault-text-muted">Verification Code</label>
+                  <label className="text-sm font-medium text-zinc-500">Verification Code</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                    className={inputClass}
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                     required
                   />
                 </div>
                 {error && (
-                  <div className="p-3 bg-vault-red/10 border border-vault-red/20 rounded-lg text-vault-red text-sm">
+                  <div className="p-3 bg-red-900/20 border border-red-800/30 rounded-lg text-red-400 text-sm">
                     {error}
                   </div>
                 )}
@@ -335,7 +333,7 @@ export default function AuthPage() {
                   Verify Code
                 </Button>
               </form>
-            </Card>
+            </div>
           </ScrollReveal>
         </div>
       </div>
@@ -348,25 +346,25 @@ export default function AuthPage() {
         <ScrollReveal>
           <h1 className="text-3xl font-bold font-[var(--font-heading)] mb-2 mt-4 text-white">
             {isLogin ? "Welcome Back" : "Join "}
-            {!isLogin && <span className="gradient-text">BountyVault</span>}
+            {!isLogin && <span className="text-[#ef233c]">BountyVault</span>}
           </h1>
-          <p className="text-vault-text-secondary text-sm mb-8">
+          <p className="text-zinc-400 text-sm mb-8">
             {isLogin
               ? "Sign in to manage your bounties and submissions"
               : "Create an account to start earning or creating bounties"}
           </p>
 
-          <Card hover={false} className="p-8 text-left">
+          <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-8 text-left">
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <>
                   {/* First Name & Last Name side by side */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-vault-text-muted">First Name</label>
+                      <label className="text-sm font-medium text-zinc-500">First Name</label>
                       <input
                         type="text"
-                        className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                        className={inputClass}
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder="John"
@@ -374,10 +372,10 @@ export default function AuthPage() {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium text-vault-text-muted">Last Name</label>
+                      <label className="text-sm font-medium text-zinc-500">Last Name</label>
                       <input
                         type="text"
-                        className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                        className={inputClass}
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         placeholder="Doe"
@@ -387,10 +385,10 @@ export default function AuthPage() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-vault-text-muted">Username</label>
+                    <label className="text-sm font-medium text-zinc-500">Username</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                      className={inputClass}
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="johndoe"
@@ -399,15 +397,15 @@ export default function AuthPage() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-vault-text-muted">I am a</label>
+                    <label className="text-sm font-medium text-zinc-500">I am a</label>
                     <div className="grid grid-cols-2 gap-4">
                       <button
                         type="button"
                         onClick={() => setRole("freelancer")}
                         className={`px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
                           role === "freelancer"
-                            ? "bg-vault-cyan/15 border-vault-cyan text-vault-cyan shadow-[0_0_15px_rgba(0,210,211,0.15)]"
-                            : "bg-vault-bg border-vault-border text-vault-text-muted hover:bg-vault-white/5"
+                            ? "bg-[#ef233c]/15 border-[#ef233c] text-[#ef233c] shadow-[0_0_15px_rgba(239,35,60,0.15)]"
+                            : "bg-white/5 border-white/10 text-zinc-500 hover:bg-white/10"
                         }`}
                       >
                         🛠️ Freelancer
@@ -417,8 +415,8 @@ export default function AuthPage() {
                         onClick={() => setRole("creator")}
                         className={`px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
                           role === "creator"
-                            ? "bg-vault-purple/15 border-vault-purple text-vault-purple-light shadow-[0_0_15px_rgba(124,92,252,0.15)]"
-                            : "bg-vault-bg border-vault-border text-vault-text-muted hover:bg-vault-white/5"
+                            ? "bg-[#ef233c]/15 border-[#ef233c] text-[#ef233c] shadow-[0_0_15px_rgba(239,35,60,0.15)]"
+                            : "bg-white/5 border-white/10 text-zinc-500 hover:bg-white/10"
                         }`}
                       >
                         🎯 Creator
@@ -429,13 +427,13 @@ export default function AuthPage() {
               )}
 
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-vault-text-muted">
+                <label className="text-sm font-medium text-zinc-500">
                   {isLogin ? "Email or Username" : "Email"}
                 </label>
                 {isLogin ? (
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                    className={inputClass}
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
                     placeholder="you@email.com or username"
@@ -444,7 +442,7 @@ export default function AuthPage() {
                 ) : (
                   <input
                     type="email"
-                    className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                    className={inputClass}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@email.com"
@@ -455,11 +453,11 @@ export default function AuthPage() {
 
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium text-vault-text-muted">Password</label>
+                  <label className="text-sm font-medium text-zinc-500">Password</label>
                 </div>
                 <input
                   type="password"
-                  className="w-full px-4 py-2.5 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple transition-colors"
+                  className={inputClass}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -468,7 +466,7 @@ export default function AuthPage() {
               </div>
 
               {error && (
-                <div className="p-3 bg-vault-red/10 border border-vault-red/20 rounded-lg text-vault-red text-sm">
+                <div className="p-3 bg-red-900/20 border border-red-800/30 rounded-lg text-red-400 text-sm">
                   {error}
                 </div>
               )}
@@ -484,11 +482,11 @@ export default function AuthPage() {
               <div id="clerk-captcha"></div>
             </form>
 
-            <div className="mt-6 text-center text-sm text-vault-text-muted">
+            <div className="mt-6 text-center text-sm text-zinc-500">
               {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
               <button
                 type="button"
-                className="text-vault-purple-light hover:underline font-medium"
+                className="text-[#ef233c] hover:underline font-medium"
                 onClick={() => {
                   setIsLogin(!isLogin);
                   setError(null);
@@ -497,9 +495,21 @@ export default function AuthPage() {
                 {isLogin ? "Sign Up" : "Log In"}
               </button>
             </div>
-          </Card>
+          </div>
         </ScrollReveal>
       </div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#ef233c] border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <AuthPageContent />
+    </Suspense>
   );
 }

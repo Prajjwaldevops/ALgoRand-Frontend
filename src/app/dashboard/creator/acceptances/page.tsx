@@ -131,9 +131,9 @@ export default function CreatorAcceptancesPage() {
   if (loading) {
     return (
       <div className="animate-pulse space-y-6 p-4">
-        <div className="h-10 bg-vault-text-muted/10 rounded-2xl w-1/3" />
+        <div className="h-10 bg-white/5 rounded-2xl w-1/3" />
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-40 bg-vault-text-muted/10 rounded-2xl" />
+          <div key={i} className="h-40 bg-white/5 rounded-2xl" />
         ))}
       </div>
     );
@@ -146,10 +146,10 @@ export default function CreatorAcceptancesPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold font-[var(--font-heading)] flex items-center gap-3">
-              <HandshakeIcon className="w-6 h-6 text-vault-purple-light" />
+              <HandshakeIcon className="w-6 h-6 text-[#ef233c]" />
               Review Acceptances
             </h1>
-            <p className="text-sm text-vault-text-secondary mt-1">
+            <p className="text-sm text-zinc-400 mt-1">
               Freelancer requests to work on your bounties
             </p>
           </div>
@@ -170,14 +170,14 @@ export default function CreatorAcceptancesPage() {
               onClick={() => setFilter(f)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all capitalize ${
                 filter === f
-                  ? "bg-vault-purple text-white shadow-lg shadow-vault-purple/20"
-                  : "text-vault-text-secondary hover:text-vault-text"
+                  ? "bg-[#ef233c] text-white shadow-lg shadow-[#ef233c]/20"
+                  : "text-zinc-400 hover:text-white"
               }`}
             >
               {f}
               {f !== "all" && (
                 <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full font-bold ${
-                  filter === f ? "bg-white/20" : "bg-vault-purple/10 text-vault-purple-light"
+                  filter === f ? "bg-white/20" : "bg-[#ef233c]/10 text-[#ef233c]"
                 }`}>
                   {acceptances.filter((a) => a.status === f).length}
                 </span>
@@ -190,10 +190,10 @@ export default function CreatorAcceptancesPage() {
       {/* Empty State */}
       {Object.keys(groupedByBounty).length === 0 && (
         <ScrollReveal delay={0.1}>
-          <div className="glass-card p-10 text-center rounded-2xl">
-            <HandshakeIcon className="w-12 h-12 text-vault-text-muted mx-auto mb-4" />
+          <div className="border border-white/10 bg-zinc-900/50 backdrop-blur-sm p-10 text-center rounded-2xl">
+            <HandshakeIcon className="w-12 h-12 text-zinc-500 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No acceptance requests</h3>
-            <p className="text-sm text-vault-text-secondary mb-6">
+            <p className="text-sm text-zinc-400 mb-6">
               When freelancers request to work on your bounties, they&apos;ll appear here.
             </p>
             <Link href="/dashboard/creator/bounties">
@@ -210,9 +210,9 @@ export default function CreatorAcceptancesPage() {
         const bountyInfo = accs[0]?.bounty;
         return (
           <ScrollReveal key={bountyId} delay={0.1 + groupIndex * 0.05}>
-            <div className="glass-card rounded-2xl overflow-hidden">
+            <div className="border border-white/10 bg-zinc-900/50 backdrop-blur-sm rounded-2xl overflow-hidden">
               {/* Bounty Header */}
-              <div className="p-5 border-b border-vault-border/50">
+              <div className="p-5 border-b border-white/5">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
@@ -224,7 +224,7 @@ export default function CreatorAcceptancesPage() {
                     <h3 className="text-sm font-semibold line-clamp-1">
                       {bountyInfo?.title || "Untitled"}
                     </h3>
-                    <div className="flex items-center gap-3 mt-1 text-xs text-vault-text-muted">
+                    <div className="flex items-center gap-3 mt-1 text-xs text-zinc-500">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {bountyInfo?.deadline ? formatDeadline(bountyInfo.deadline) : "—"}
@@ -262,10 +262,10 @@ export default function CreatorAcceptancesPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-semibold">{fl?.display_name || fl?.username || "Unknown"}</span>
-                            <span className="text-xs text-vault-text-muted">@{fl?.username}</span>
+                            <span className="text-xs text-zinc-500">@{fl?.username}</span>
                           </div>
-                          <div className="flex items-center gap-3 mt-0.5 text-xs text-vault-text-muted">
-                            <span className="flex items-center gap-1 text-vault-amber">
+                          <div className="flex items-center gap-3 mt-0.5 text-xs text-zinc-500">
+                            <span className="flex items-center gap-1 text-amber-400">
                               <Star className="w-3 h-3" />
                               {fl?.reputation_score || 0} rep
                             </span>
@@ -278,7 +278,7 @@ export default function CreatorAcceptancesPage() {
                             ) : null}
                           </div>
                           {acc.message && (
-                            <p className="text-xs text-vault-text-secondary mt-1 line-clamp-1 italic">
+                            <p className="text-xs text-zinc-400 mt-1 line-clamp-1 italic">
                               &quot;{acc.message}&quot;
                             </p>
                           )}
@@ -298,7 +298,7 @@ export default function CreatorAcceptancesPage() {
                               <button
                                 onClick={() => handleApprove(acc.bounty_id, acc.freelancer_id!)}
                                 disabled={actionLoading === acc.freelancer_id}
-                                className="p-2 rounded-xl bg-vault-green/10 text-vault-green hover:bg-vault-green/20 transition-colors disabled:opacity-50"
+                                className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors disabled:opacity-50"
                                 title="Approve & Lock Escrow"
                               >
                                 {actionLoading === acc.freelancer_id ? (
@@ -310,7 +310,7 @@ export default function CreatorAcceptancesPage() {
                               <button
                                 onClick={() => handleReject(acc.bounty_id, acc.freelancer_id!)}
                                 disabled={actionLoading === acc.freelancer_id}
-                                className="p-2 rounded-xl bg-vault-red/10 text-vault-red hover:bg-vault-red/20 transition-colors disabled:opacity-50"
+                                className="p-2 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50"
                                 title="Reject"
                               >
                                 <XCircle className="w-4 h-4" />
@@ -318,7 +318,7 @@ export default function CreatorAcceptancesPage() {
                             </>
                           ) : (
                             <span className={`text-[10px] uppercase tracking-wider px-2 py-1 rounded-lg font-medium ${
-                              acc.status === "approved" ? "bg-vault-green/10 text-vault-green" : "bg-vault-red/10 text-vault-red"
+                              acc.status === "approved" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"
                             }`}>
                               {acc.status}
                             </span>
@@ -328,39 +328,39 @@ export default function CreatorAcceptancesPage() {
 
                       {/* Expanded Profile View */}
                       {isExpanded && fl && (
-                        <div className="mt-4 ml-14 p-4 rounded-xl bg-vault-white/5 border border-vault-border/30 space-y-3">
-                          <h4 className="text-xs font-semibold text-vault-text-muted uppercase tracking-wider">
+                        <div className="mt-4 ml-14 p-4 rounded-xl bg-vault-white/5 border border-white/5 space-y-3">
+                          <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
                             Freelancer Profile
                           </h4>
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
                             <div className="glass p-3 rounded-xl">
-                              <div className="text-lg font-bold text-vault-amber">{fl.reputation_score}</div>
-                              <div className="text-[10px] text-vault-text-muted">Reputation</div>
+                              <div className="text-lg font-bold text-amber-400">{fl.reputation_score}</div>
+                              <div className="text-[10px] text-zinc-500">Reputation</div>
                             </div>
                             <div className="glass p-3 rounded-xl">
-                              <div className="text-lg font-bold text-vault-green">{fl.total_bounties_completed}</div>
-                              <div className="text-[10px] text-vault-text-muted">Completed</div>
+                              <div className="text-lg font-bold text-emerald-400">{fl.total_bounties_completed}</div>
+                              <div className="text-[10px] text-zinc-500">Completed</div>
                             </div>
                             <div className="glass p-3 rounded-xl">
-                              <div className="text-lg font-bold text-vault-cyan">
+                              <div className="text-lg font-bold text-[#ef233c]">
                                 {fl.avg_rating ? fl.avg_rating.toFixed(1) : "—"}
                               </div>
-                              <div className="text-[10px] text-vault-text-muted">Rating</div>
+                              <div className="text-[10px] text-zinc-500">Rating</div>
                             </div>
                             <div className="glass p-3 rounded-xl">
-                              <div className="text-lg font-bold text-vault-purple-light">{fl.total_ratings}</div>
-                              <div className="text-[10px] text-vault-text-muted">Reviews</div>
+                              <div className="text-lg font-bold text-[#ef233c]">{fl.total_ratings}</div>
+                              <div className="text-[10px] text-zinc-500">Reviews</div>
                             </div>
                           </div>
                           {fl.bio && (
-                            <p className="text-xs text-vault-text-secondary leading-relaxed">
+                            <p className="text-xs text-zinc-400 leading-relaxed">
                               {fl.bio}
                             </p>
                           )}
                           {acc.message && (
-                            <div className="p-3 rounded-lg bg-vault-purple/5 border border-vault-purple/10">
-                              <p className="text-[10px] text-vault-text-muted uppercase tracking-wider mb-1">Cover Message</p>
-                              <p className="text-xs text-vault-text-secondary">{acc.message}</p>
+                            <div className="p-3 rounded-lg bg-[#ef233c]/5 border border-[#ef233c]/10">
+                              <p className="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">Cover Message</p>
+                              <p className="text-xs text-zinc-400">{acc.message}</p>
                             </div>
                           )}
                         </div>

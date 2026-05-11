@@ -6,7 +6,6 @@ import { authApi, type Profile } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { truncateAddress } from "@/lib/utils";
 import {
@@ -97,13 +96,15 @@ export default function ProfilePage() {
     }
   };
 
+  const inputClass = "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-[#ef233c]/40 transition-colors placeholder:text-zinc-600";
+
   if (loading) {
     return (
       <div className="min-h-screen pt-24 pb-20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           <div className="animate-pulse space-y-6">
-            <div className="h-32 bg-vault-text-muted/10 rounded-2xl" />
-            <div className="h-48 bg-vault-text-muted/10 rounded-2xl" />
+            <div className="h-32 bg-white/5 rounded-xl" />
+            <div className="h-48 bg-white/5 rounded-xl" />
           </div>
         </div>
       </div>
@@ -117,31 +118,31 @@ export default function ProfilePage() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         {/* Profile Header */}
         <ScrollReveal>
-          <Card hover={false} className="p-6 sm:p-8 mb-6">
+          <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-6 sm:p-8 mb-6">
             <div className="flex flex-col sm:flex-row items-start gap-5">
               {/* Avatar */}
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-vault-purple to-vault-cyan flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-vault-purple/20">
+              <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-[#ef233c] to-red-900 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-[#ef233c]/20">
                 {profile.username?.charAt(0).toUpperCase() || "U"}
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h1 className="text-xl font-bold font-[var(--font-heading)]">
+                  <h1 className="text-xl font-bold font-[var(--font-heading)] text-white">
                     {profile.display_name || profile.username}
                   </h1>
-                  <span className="px-2 py-0.5 rounded-full bg-vault-purple/10 text-vault-purple-light text-xs font-medium capitalize">
+                  <span className="px-2 py-0.5 rounded-full bg-[#ef233c]/10 text-red-300 text-xs font-medium capitalize">
                     {profile.role}
                   </span>
                 </div>
-                <p className="text-sm text-vault-text-secondary mb-3">@{profile.username}</p>
+                <p className="text-sm text-zinc-400 mb-3">@{profile.username}</p>
 
                 {profile.wallet_address ? (
-                  <div className="inline-flex items-center gap-2 glass px-3 py-1.5 rounded-lg">
-                    <Wallet className="w-3.5 h-3.5 text-vault-cyan" />
-                    <span className="text-xs font-mono text-vault-text-secondary">
+                  <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
+                    <Wallet className="w-3.5 h-3.5 text-[#ef233c]" />
+                    <span className="text-xs font-mono text-zinc-400">
                       {truncateAddress(profile.wallet_address, 6)}
                     </span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-vault-green" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   </div>
                 ) : (
                   <Button variant="secondary" size="sm" onClick={connectWallet}>
@@ -164,66 +165,66 @@ export default function ProfilePage() {
                 </Button>
               </div>
             </div>
-          </Card>
+          </div>
         </ScrollReveal>
 
         {/* Stats */}
         <ScrollReveal delay={0.1}>
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <Card hover={false} className="p-4 text-center">
-              <Star className="w-5 h-5 text-vault-amber mx-auto mb-2" />
-              <div className="text-2xl font-bold font-[var(--font-heading)] gradient-text">
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-4 text-center">
+              <Star className="w-5 h-5 text-amber-400 mx-auto mb-2" />
+              <div className="text-2xl font-bold font-[var(--font-heading)] text-white">
                 {profile.reputation_score}
               </div>
-              <p className="text-xs text-vault-text-muted mt-1">Reputation</p>
-            </Card>
-            <Card hover={false} className="p-4 text-center">
-              <Briefcase className="w-5 h-5 text-vault-purple-light mx-auto mb-2" />
-              <div className="text-2xl font-bold font-[var(--font-heading)]">
+              <p className="text-xs text-zinc-500 mt-1">Reputation</p>
+            </div>
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-4 text-center">
+              <Briefcase className="w-5 h-5 text-[#ef233c] mx-auto mb-2" />
+              <div className="text-2xl font-bold font-[var(--font-heading)] text-white">
                 {profile.total_bounties_created}
               </div>
-              <p className="text-xs text-vault-text-muted mt-1">Created</p>
-            </Card>
-            <Card hover={false} className="p-4 text-center">
-              <CheckCircle className="w-5 h-5 text-vault-green mx-auto mb-2" />
-              <div className="text-2xl font-bold font-[var(--font-heading)]">
+              <p className="text-xs text-zinc-500 mt-1">Created</p>
+            </div>
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-4 text-center">
+              <CheckCircle className="w-5 h-5 text-emerald-400 mx-auto mb-2" />
+              <div className="text-2xl font-bold font-[var(--font-heading)] text-white">
                 {profile.total_bounties_completed}
               </div>
-              <p className="text-xs text-vault-text-muted mt-1">Completed</p>
-            </Card>
+              <p className="text-xs text-zinc-500 mt-1">Completed</p>
+            </div>
           </div>
         </ScrollReveal>
 
         {/* Edit Form / Bio */}
         <ScrollReveal delay={0.2}>
           {editing ? (
-            <Card hover={false} className="p-6 space-y-4">
-              <h2 className="text-sm font-semibold flex items-center gap-2">
-                <Edit3 className="w-4 h-4 text-vault-purple-light" />
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-6 space-y-4">
+              <h2 className="text-sm font-semibold flex items-center gap-2 text-white">
+                <Edit3 className="w-4 h-4 text-[#ef233c]" />
                 Edit Profile
               </h2>
               <div>
-                <label className="text-xs text-vault-text-muted mb-1.5 block">Display Name</label>
+                <label className="text-xs text-zinc-500 mb-1.5 block">Display Name</label>
                 <input
                   id="edit-display-name"
                   type="text"
                   value={editForm.display_name}
                   onChange={(e) => setEditForm((f) => ({ ...f, display_name: e.target.value }))}
-                  className="w-full px-4 py-3 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple/40 transition-colors"
+                  className={inputClass}
                 />
               </div>
               <div>
-                <label className="text-xs text-vault-text-muted mb-1.5 block">Bio</label>
+                <label className="text-xs text-zinc-500 mb-1.5 block">Bio</label>
                 <textarea
                   id="edit-bio"
                   value={editForm.bio}
                   onChange={(e) => setEditForm((f) => ({ ...f, bio: e.target.value }))}
-                  className="w-full px-4 py-3 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text focus:outline-none focus:border-vault-purple/40 transition-colors resize-none h-24"
+                  className={`${inputClass} resize-none h-24`}
                   placeholder="Tell us about yourself..."
                 />
               </div>
               <div>
-                <label className="text-xs text-vault-text-muted mb-1.5 block">Wallet Address</label>
+                <label className="text-xs text-zinc-500 mb-1.5 block">Wallet Address</label>
                 <div className="flex gap-2">
                   <input
                     id="edit-wallet"
@@ -231,7 +232,7 @@ export default function ProfilePage() {
                     value={editForm.wallet_address}
                     onChange={(e) => setEditForm((f) => ({ ...f, wallet_address: e.target.value }))}
                     placeholder="ALGO..."
-                    className="flex-1 px-4 py-3 bg-vault-bg/50 border border-vault-border rounded-xl text-sm text-vault-text font-mono focus:outline-none focus:border-vault-purple/40 transition-colors"
+                    className={`flex-1 ${inputClass} font-mono`}
                   />
                   <Button variant="secondary" size="sm" onClick={connectWallet}>
                     <Wallet className="w-4 h-4" />
@@ -245,17 +246,17 @@ export default function ProfilePage() {
                   Save
                 </Button>
               </div>
-            </Card>
+            </div>
           ) : (
-            <Card hover={false} className="p-6">
-              <h2 className="text-sm font-semibold flex items-center gap-2 mb-3">
-                <Shield className="w-4 h-4 text-vault-purple-light" />
+            <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-6">
+              <h2 className="text-sm font-semibold flex items-center gap-2 mb-3 text-white">
+                <Shield className="w-4 h-4 text-[#ef233c]" />
                 About
               </h2>
-              <p className="text-sm text-vault-text-secondary leading-relaxed">
+              <p className="text-sm text-zinc-400 leading-relaxed">
                 {profile.bio || "No bio set. Click the edit button to add one."}
               </p>
-            </Card>
+            </div>
           )}
         </ScrollReveal>
       </div>

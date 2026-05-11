@@ -75,21 +75,21 @@ function StatCard({ label, value, icon, color = "purple" }: {
   color?: string;
 }) {
   const colorMap: Record<string, string> = {
-    purple: "from-vault-purple/20 to-vault-purple/5 border-vault-purple/30",
-    cyan: "from-vault-cyan/20 to-vault-cyan/5 border-vault-cyan/30",
+    purple: "from-vault-purple/20 to-vault-purple/5 border-[#ef233c]/30",
+    cyan: "from-vault-cyan/20 to-vault-cyan/5 border-[#ef233c]/30",
     green: "from-vault-green/20 to-vault-green/5 border-vault-green/30",
     amber: "from-vault-amber/20 to-vault-amber/5 border-vault-amber/30",
-    red: "from-vault-red/20 to-vault-red/5 border-vault-red/30",
+    red: "from-vault-red/20 to-vault-red/5 border-red-800/30",
     pink: "from-vault-pink/20 to-vault-pink/5 border-vault-pink/30",
   };
 
   return (
     <div className={`bg-gradient-to-br ${colorMap[color]} border rounded-xl p-5 transition-all duration-300 hover:scale-[1.02]`}>
       <div className="flex items-center justify-between mb-3">
-        <span className="text-vault-text-secondary text-sm">{label}</span>
-        <div className="text-vault-text-muted">{icon}</div>
+        <span className="text-zinc-400 text-sm">{label}</span>
+        <div className="text-zinc-500">{icon}</div>
       </div>
-      <p className="text-2xl font-heading font-bold text-vault-text">{value}</p>
+      <p className="text-2xl font-[var(--font-heading)] font-bold text-white">{value}</p>
     </div>
   );
 }
@@ -139,8 +139,8 @@ function AdminSidebar({ active, onNavigate }: { active: TabType; onNavigate: (t:
   ];
 
   return (
-    <aside className="w-64 min-h-screen bg-vault-surface border-r border-vault-border flex flex-col">
-      <div className="p-6 border-b border-vault-border">
+    <aside className="w-64 min-h-screen bg-vault-surface border-r border-white/10 flex flex-col">
+      <div className="p-6 border-b border-white/10">
         <Link href="/" className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-vault-purple to-vault-cyan flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -148,8 +148,8 @@ function AdminSidebar({ active, onNavigate }: { active: TabType; onNavigate: (t:
             </svg>
           </div>
           <div>
-            <p className="font-heading font-bold text-vault-text text-sm">BountyVault</p>
-            <p className="text-xs text-vault-purple">Admin Panel</p>
+            <p className="font-[var(--font-heading)] font-bold text-white text-sm">BountyVault</p>
+            <p className="text-xs text-[#ef233c]">Admin Panel</p>
           </div>
         </Link>
       </div>
@@ -161,8 +161,8 @@ function AdminSidebar({ active, onNavigate }: { active: TabType; onNavigate: (t:
             onClick={() => onNavigate(tab.id)}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
               active === tab.id
-                ? "bg-vault-purple/15 text-vault-purple border border-vault-purple/30"
-                : "text-vault-text-secondary hover:bg-vault-card hover:text-vault-text"
+                ? "bg-[#ef233c]/15 text-[#ef233c] border border-[#ef233c]/30"
+                : "text-zinc-400 hover:bg-vault-card hover:text-white"
             }`}
           >
             {tab.icon}
@@ -171,14 +171,14 @@ function AdminSidebar({ active, onNavigate }: { active: TabType; onNavigate: (t:
         ))}
       </nav>
 
-      <div className="p-4 border-t border-vault-border">
+      <div className="p-4 border-t border-white/10">
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-8 h-8 rounded-full bg-vault-purple/20 flex items-center justify-center text-vault-purple text-sm font-bold">
+          <div className="w-8 h-8 rounded-full bg-[#ef233c]/20 flex items-center justify-center text-[#ef233c] text-sm font-bold">
             {adminUser[0]?.toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-vault-text truncate">{adminUser}</p>
-            <p className="text-xs text-vault-text-muted">Administrator</p>
+            <p className="text-sm font-medium text-white truncate">{adminUser}</p>
+            <p className="text-xs text-zinc-500">Administrator</p>
           </div>
           <button
             onClick={() => {
@@ -186,7 +186,7 @@ function AdminSidebar({ active, onNavigate }: { active: TabType; onNavigate: (t:
               localStorage.removeItem("admin_username");
               window.location.href = "/admin/login";
             }}
-            className="p-1.5 rounded-lg hover:bg-vault-red/10 text-vault-text-muted hover:text-vault-red transition-colors"
+            className="p-1.5 rounded-lg hover:bg-red-500/10 text-zinc-500 hover:text-red-400 transition-colors"
             title="Logout"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -206,12 +206,12 @@ function OverviewTab() {
   const { data: stats, loading } = useAdminFetch<AdminStats>("/api/admin/stats");
 
   if (loading) return <LoadingSpinner />;
-  if (!stats) return <p className="text-vault-text-muted">Failed to load stats</p>;
+  if (!stats) return <p className="text-zinc-500">Failed to load stats</p>;
 
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-lg font-heading font-semibold text-vault-text mb-4">Platform Overview</h2>
+        <h2 className="text-lg font-[var(--font-heading)] font-semibold text-white mb-4">Platform Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard label="Total Users" value={(stats.total_freelancers + stats.total_creators).toLocaleString()} color="purple"
             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>} />
@@ -225,7 +225,7 @@ function OverviewTab() {
       </div>
 
       <div>
-        <h2 className="text-lg font-heading font-semibold text-vault-text mb-4">Bounty Breakdown</h2>
+        <h2 className="text-lg font-[var(--font-heading)] font-semibold text-white mb-4">Bounty Breakdown</h2>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           <StatCard label="Open" value={stats.open_bounties} color="cyan" icon={<span className="text-lg">📂</span>} />
           <StatCard label="In Progress" value={stats.in_progress_bounties} color="amber" icon={<span className="text-lg">⏳</span>} />
@@ -236,7 +236,7 @@ function OverviewTab() {
       </div>
 
       <div>
-        <h2 className="text-lg font-heading font-semibold text-vault-text mb-4">Activity</h2>
+        <h2 className="text-lg font-[var(--font-heading)] font-semibold text-white mb-4">Activity</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatCard label="Freelancers" value={stats.total_freelancers} color="purple" icon={<span className="text-lg">👩‍💻</span>} />
           <StatCard label="Creators" value={stats.total_creators} color="cyan" icon={<span className="text-lg">🏢</span>} />
@@ -258,34 +258,34 @@ function UsersTab() {
 
   return (
     <div>
-      <h2 className="text-lg font-heading font-semibold text-vault-text mb-4">All Users ({data?.total || 0})</h2>
-      <div className="overflow-x-auto rounded-xl border border-vault-border">
+      <h2 className="text-lg font-[var(--font-heading)] font-semibold text-white mb-4">All Users ({data?.total || 0})</h2>
+      <div className="overflow-x-auto rounded-xl border border-white/10">
         <table className="w-full text-sm">
           <thead className="bg-vault-surface">
-            <tr className="border-b border-vault-border">
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">User</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Email</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Role</th>
-              <th className="text-right px-4 py-3 text-vault-text-secondary font-medium">Rep</th>
-              <th className="text-right px-4 py-3 text-vault-text-secondary font-medium">Earned</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Joined</th>
+            <tr className="border-b border-white/10">
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">User</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Email</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Role</th>
+              <th className="text-right px-4 py-3 text-zinc-400 font-medium">Rep</th>
+              <th className="text-right px-4 py-3 text-zinc-400 font-medium">Earned</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Joined</th>
             </tr>
           </thead>
           <tbody>
             {users.map((u, i) => (
-              <tr key={i} className="border-b border-vault-border/50 hover:bg-vault-card/50 transition-colors">
-                <td className="px-4 py-3 text-vault-text font-medium">{String(u.username)}</td>
-                <td className="px-4 py-3 text-vault-text-secondary">{String(u.email)}</td>
+              <tr key={i} className="border-b border-white/5 hover:bg-vault-card/50 transition-colors">
+                <td className="px-4 py-3 text-white font-medium">{String(u.username)}</td>
+                <td className="px-4 py-3 text-zinc-400">{String(u.email)}</td>
                 <td className="px-4 py-3">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    u.role === "creator" ? "bg-vault-cyan/15 text-vault-cyan" : "bg-vault-purple/15 text-vault-purple"
+                    u.role === "creator" ? "bg-[#ef233c]/15 text-[#ef233c]" : "bg-[#ef233c]/15 text-[#ef233c]"
                   }`}>
                     {String(u.role)}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-right text-vault-text">{Number(u.reputation_score)}</td>
-                <td className="px-4 py-3 text-right text-vault-green font-mono">{Number(u.total_earned_algo).toFixed(2)} Ⱥ</td>
-                <td className="px-4 py-3 text-vault-text-muted">{new Date(String(u.created_at)).toLocaleDateString()}</td>
+                <td className="px-4 py-3 text-right text-white">{Number(u.reputation_score)}</td>
+                <td className="px-4 py-3 text-right text-emerald-400 font-mono">{Number(u.total_earned_algo).toFixed(2)} Ⱥ</td>
+                <td className="px-4 py-3 text-zinc-500">{new Date(String(u.created_at)).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
@@ -305,42 +305,42 @@ function BountiesTab() {
   if (!bounties) return null;
 
   const statusColors: Record<string, string> = {
-    open: "bg-vault-cyan/15 text-vault-cyan",
-    in_progress: "bg-vault-amber/15 text-vault-amber",
-    completed: "bg-vault-green/15 text-vault-green",
-    disputed: "bg-vault-red/15 text-vault-red",
-    expired: "bg-vault-text-muted/15 text-vault-text-muted",
-    cancelled: "bg-vault-text-muted/15 text-vault-text-muted",
+    open: "bg-[#ef233c]/15 text-[#ef233c]",
+    in_progress: "bg-amber-500/15 text-amber-400",
+    completed: "bg-emerald-500/15 text-emerald-400",
+    disputed: "bg-red-500/15 text-red-400",
+    expired: "bg-zinc-500/15 text-zinc-500",
+    cancelled: "bg-zinc-500/15 text-zinc-500",
   };
 
   return (
     <div>
-      <h2 className="text-lg font-heading font-semibold text-vault-text mb-4">All Bounties</h2>
-      <div className="overflow-x-auto rounded-xl border border-vault-border">
+      <h2 className="text-lg font-[var(--font-heading)] font-semibold text-white mb-4">All Bounties</h2>
+      <div className="overflow-x-auto rounded-xl border border-white/10">
         <table className="w-full text-sm">
           <thead className="bg-vault-surface">
-            <tr className="border-b border-vault-border">
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">ID</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Title</th>
-              <th className="text-right px-4 py-3 text-vault-text-secondary font-medium">Reward</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Status</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Creator</th>
-              <th className="text-right px-4 py-3 text-vault-text-secondary font-medium">Subs</th>
+            <tr className="border-b border-white/10">
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">ID</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Title</th>
+              <th className="text-right px-4 py-3 text-zinc-400 font-medium">Reward</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Status</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Creator</th>
+              <th className="text-right px-4 py-3 text-zinc-400 font-medium">Subs</th>
             </tr>
           </thead>
           <tbody>
             {bounties.map((b, i) => (
-              <tr key={i} className="border-b border-vault-border/50 hover:bg-vault-card/50 transition-colors">
-                <td className="px-4 py-3 font-mono text-vault-purple text-xs">{String(b.bounty_id)}</td>
-                <td className="px-4 py-3 text-vault-text font-medium max-w-[200px] truncate">{String(b.title)}</td>
-                <td className="px-4 py-3 text-right text-vault-green font-mono">{Number(b.reward_algo).toFixed(2)} Ⱥ</td>
+              <tr key={i} className="border-b border-white/5 hover:bg-vault-card/50 transition-colors">
+                <td className="px-4 py-3 font-mono text-[#ef233c] text-xs">{String(b.bounty_id)}</td>
+                <td className="px-4 py-3 text-white font-medium max-w-[200px] truncate">{String(b.title)}</td>
+                <td className="px-4 py-3 text-right text-emerald-400 font-mono">{Number(b.reward_algo).toFixed(2)} Ⱥ</td>
                 <td className="px-4 py-3">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[String(b.status)] || ""}`}>
                     {String(b.status)}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-vault-text-secondary">{String(b.creator_username)}</td>
-                <td className="px-4 py-3 text-right text-vault-text">{Number(b.submission_count)}</td>
+                <td className="px-4 py-3 text-zinc-400">{String(b.creator_username)}</td>
+                <td className="px-4 py-3 text-right text-white">{Number(b.submission_count)}</td>
               </tr>
             ))}
           </tbody>
@@ -360,51 +360,51 @@ function TransactionsTab() {
   if (!txns) return null;
 
   const eventColors: Record<string, string> = {
-    escrow_locked: "text-vault-cyan",
-    work_submitted: "text-vault-purple",
-    submission_approved: "text-vault-green",
-    submission_rejected: "text-vault-red",
-    dispute_raised: "text-vault-amber",
+    escrow_locked: "text-[#ef233c]",
+    work_submitted: "text-[#ef233c]",
+    submission_approved: "text-emerald-400",
+    submission_rejected: "text-red-400",
+    dispute_raised: "text-amber-400",
     dao_vote_cast: "text-vault-pink",
-    dao_resolved: "text-vault-green",
-    freelancer_letgo: "text-vault-text-muted",
-    bounty_expired: "text-vault-text-muted",
+    dao_resolved: "text-emerald-400",
+    freelancer_letgo: "text-zinc-500",
+    bounty_expired: "text-zinc-500",
   };
 
   return (
     <div>
-      <h2 className="text-lg font-heading font-semibold text-vault-text mb-4">Transaction Log</h2>
-      <div className="overflow-x-auto rounded-xl border border-vault-border">
+      <h2 className="text-lg font-[var(--font-heading)] font-semibold text-white mb-4">Transaction Log</h2>
+      <div className="overflow-x-auto rounded-xl border border-white/10">
         <table className="w-full text-sm">
           <thead className="bg-vault-surface">
-            <tr className="border-b border-vault-border">
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Event</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Actor</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Txn ID</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">IPFS</th>
-              <th className="text-right px-4 py-3 text-vault-text-secondary font-medium">Amount</th>
-              <th className="text-left px-4 py-3 text-vault-text-secondary font-medium">Time</th>
+            <tr className="border-b border-white/10">
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Event</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Actor</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Txn ID</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">IPFS</th>
+              <th className="text-right px-4 py-3 text-zinc-400 font-medium">Amount</th>
+              <th className="text-left px-4 py-3 text-zinc-400 font-medium">Time</th>
             </tr>
           </thead>
           <tbody>
             {txns.map((t, i) => (
-              <tr key={i} className="border-b border-vault-border/50 hover:bg-vault-card/50 transition-colors">
-                <td className={`px-4 py-3 font-mono text-xs font-medium ${eventColors[String(t.event)] || "text-vault-text"}`}>
+              <tr key={i} className="border-b border-white/5 hover:bg-vault-card/50 transition-colors">
+                <td className={`px-4 py-3 font-mono text-xs font-medium ${eventColors[String(t.event)] || "text-white"}`}>
                   {String(t.event)}
                 </td>
-                <td className="px-4 py-3 text-vault-text-secondary">{String(t.actor_username)}</td>
+                <td className="px-4 py-3 text-zinc-400">{String(t.actor_username)}</td>
                 <td className="px-4 py-3">
                   {t.txn_id ? (
                     <a
                       href={`https://testnet.algoexplorer.io/tx/${t.txn_id}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-mono text-xs text-vault-cyan hover:underline"
+                      className="font-mono text-xs text-[#ef233c] hover:underline"
                     >
                       {String(t.txn_id).slice(0, 12)}…
                     </a>
                   ) : (
-                    <span className="text-vault-text-muted text-xs">—</span>
+                    <span className="text-zinc-500 text-xs">—</span>
                   )}
                 </td>
                 <td className="px-4 py-3">
@@ -413,19 +413,19 @@ function TransactionsTab() {
                       href={String(t.ipfs_gateway_url)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs text-vault-purple hover:underline"
+                      className="inline-flex items-center gap-1 text-xs text-[#ef233c] hover:underline"
                     >
                       <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
                       View
                     </a>
                   ) : (
-                    <span className="text-vault-text-muted text-xs">—</span>
+                    <span className="text-zinc-500 text-xs">—</span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-right font-mono text-vault-green text-xs">
+                <td className="px-4 py-3 text-right font-mono text-emerald-400 text-xs">
                   {t.amount_algo ? `${Number(t.amount_algo).toFixed(2)} Ⱥ` : "—"}
                 </td>
-                <td className="px-4 py-3 text-vault-text-muted text-xs">{new Date(String(t.created_at)).toLocaleString()}</td>
+                <td className="px-4 py-3 text-zinc-500 text-xs">{new Date(String(t.created_at)).toLocaleString()}</td>
               </tr>
             ))}
           </tbody>
@@ -446,46 +446,46 @@ function DisputesTab() {
 
   return (
     <div>
-      <h2 className="text-lg font-heading font-semibold text-vault-text mb-4">All Disputes</h2>
+      <h2 className="text-lg font-[var(--font-heading)] font-semibold text-white mb-4">All Disputes</h2>
       <div className="space-y-4">
         {disputes.length === 0 && (
-          <p className="text-vault-text-muted text-center py-8">No disputes found</p>
+          <p className="text-zinc-500 text-center py-8">No disputes found</p>
         )}
         {disputes.map((d, i) => (
-          <div key={i} className="bg-vault-card border border-vault-border rounded-xl p-5 hover:border-vault-border-hover transition-all">
+          <div key={i} className="bg-vault-card border border-white/10 rounded-xl p-5 hover:border-white/10-hover transition-all">
             <div className="flex items-start justify-between mb-3">
               <div>
-                <span className="font-mono text-sm text-vault-purple font-medium">{String(d.dispute_id)}</span>
-                <h3 className="text-vault-text font-medium mt-1">{String(d.bounty_title)}</h3>
+                <span className="font-mono text-sm text-[#ef233c] font-medium">{String(d.dispute_id)}</span>
+                <h3 className="text-white font-medium mt-1">{String(d.bounty_title)}</h3>
               </div>
               <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                d.status === "open" ? "bg-vault-amber/15 text-vault-amber" :
-                String(d.status).includes("freelancer") ? "bg-vault-green/15 text-vault-green" :
-                "bg-vault-red/15 text-vault-red"
+                d.status === "open" ? "bg-amber-500/15 text-amber-400" :
+                String(d.status).includes("freelancer") ? "bg-emerald-500/15 text-emerald-400" :
+                "bg-red-500/15 text-red-400"
               }`}>
                 {String(d.status)}
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
               <div>
-                <p className="text-vault-text-muted">Freelancer</p>
-                <p className="text-vault-text">{String(d.freelancer_name)}</p>
+                <p className="text-zinc-500">Freelancer</p>
+                <p className="text-white">{String(d.freelancer_name)}</p>
               </div>
               <div>
-                <p className="text-vault-text-muted">Creator</p>
-                <p className="text-vault-text">{String(d.creator_name)}</p>
+                <p className="text-zinc-500">Creator</p>
+                <p className="text-white">{String(d.creator_name)}</p>
               </div>
               <div>
-                <p className="text-vault-text-muted">Votes</p>
-                <p className="text-vault-text">
-                  <span className="text-vault-cyan">{Number(d.votes_creator)} creator</span>
+                <p className="text-zinc-500">Votes</p>
+                <p className="text-white">
+                  <span className="text-[#ef233c]">{Number(d.votes_creator)} creator</span>
                   {" / "}
-                  <span className="text-vault-purple">{Number(d.votes_freelancer)} freelancer</span>
+                  <span className="text-[#ef233c]">{Number(d.votes_freelancer)} freelancer</span>
                 </p>
               </div>
               <div>
-                <p className="text-vault-text-muted">Reward</p>
-                <p className="text-vault-green font-mono">{Number(d.reward_algo).toFixed(2)} Ⱥ</p>
+                <p className="text-zinc-500">Reward</p>
+                <p className="text-emerald-400 font-mono">{Number(d.reward_algo).toFixed(2)} Ⱥ</p>
               </div>
             </div>
           </div>
@@ -501,7 +501,7 @@ function DisputesTab() {
 function LoadingSpinner() {
   return (
     <div className="flex items-center justify-center py-20">
-      <div className="w-8 h-8 border-2 border-vault-purple border-t-transparent rounded-full animate-spin" />
+      <div className="w-8 h-8 border-2 border-[#ef233c] border-t-transparent rounded-full animate-spin" />
     </div>
   );
 }
@@ -529,11 +529,11 @@ export default function AdminDashboardPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-vault-bg">
+    <div className="flex min-h-screen bg-black">
       <AdminSidebar active={activeTab} onNavigate={setActiveTab} />
       <main className="flex-1 overflow-y-auto">
-        <header className="sticky top-0 z-10 bg-vault-bg/80 backdrop-blur-xl border-b border-vault-border px-8 py-4">
-          <h1 className="text-xl font-heading font-bold text-vault-text">{tabNames[activeTab]}</h1>
+        <header className="sticky top-0 z-10 bg-black/80 backdrop-blur-xl border-b border-white/10 px-8 py-4">
+          <h1 className="text-xl font-[var(--font-heading)] font-bold text-white">{tabNames[activeTab]}</h1>
         </header>
         <div className="p-8">
           {activeTab === "overview" && <OverviewTab />}

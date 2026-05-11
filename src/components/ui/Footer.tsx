@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Zap, ExternalLink, Globe, MessageCircle } from "lucide-react";
+import { ExternalLink, Globe, MessageCircle } from "lucide-react";
 
 const FOOTER_LINKS = {
-  Product: [
+  Platform: [
     { label: "Explore Bounties", href: "/bounties" },
     { label: "Create Bounty", href: "/create" },
     { label: "How It Works", href: "/#how-it-works" },
+    { label: "Pricing", href: "#" },
   ],
   Developers: [
     { label: "Documentation", href: "#" },
@@ -23,71 +24,65 @@ const FOOTER_LINKS = {
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-vault-border bg-vault-bg">
-      {/* Glow line */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-vault-purple/50 to-transparent" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
-          {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-vault-purple to-vault-cyan flex items-center justify-center">
-                <Zap className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-lg font-bold font-[var(--font-heading)]">
-                <span className="text-vault-text">Bounty</span>
-                <span className="gradient-text">Vault</span>
-              </span>
-            </Link>
-            <p className="text-sm text-vault-text-secondary max-w-xs leading-relaxed mb-6">
-              Decentralized bounty escrow on Algorand. Trustless, transparent, and
-              lightning-fast. Built for the future of work.
-            </p>
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-vault-green/10 text-vault-green text-xs font-medium border border-vault-green/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-vault-green animate-pulse" />
-                Algorand Testnet
-              </span>
-            </div>
+    <footer className="bg-black border-t border-zinc-900 pt-20 pb-10 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-24 relative z-10">
+        {/* Brand */}
+        <div className="md:col-span-2">
+          <Link href="/" className="flex items-center gap-2 mb-6">
+            <div className="w-5 h-5 bg-[#ef233c] rounded-sm rotate-45" />
+            <span className="text-2xl font-bold font-[var(--font-heading)] tracking-tight text-white">
+              BountyVault
+            </span>
+          </Link>
+          <p className="text-zinc-500 max-w-xs leading-relaxed mb-6">
+            Decentralized bounty escrow on Algorand. Trustless, transparent, and
+            lightning-fast. Built for the future of work.
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-medium border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Algorand Testnet
+            </span>
           </div>
-
-          {/* Links */}
-          {Object.entries(FOOTER_LINKS).map(([title, links]) => (
-            <div key={title}>
-              <h3 className="text-sm font-semibold text-vault-text mb-4">{title}</h3>
-              <ul className="space-y-2.5">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-vault-text-secondary hover:text-vault-text transition-colors flex items-center gap-1 group"
-                    >
-                      {link.label}
-                      {link.href === "#" && (
-                        <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-50 transition-opacity" />
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
         </div>
 
-        {/* Bottom */}
-        <div className="mt-14 pt-8 border-t border-vault-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-vault-text-muted">
-            © 2026 BountyVault. Built for AlgoBharat Hackathon.
-          </p>
-          <div className="flex items-center gap-4">
-            <a href="#" className="text-vault-text-muted hover:text-vault-text transition-colors">
-              <Globe className="w-4 h-4" />
-            </a>
-            <a href="#" className="text-vault-text-muted hover:text-vault-text transition-colors">
-              <MessageCircle className="w-4 h-4" />
-            </a>
+        {/* Links */}
+        {Object.entries(FOOTER_LINKS).map(([title, links]) => (
+          <div key={title}>
+            <h4 className="text-xs font-bold text-[#ef233c] uppercase tracking-widest mb-6">{title}</h4>
+            <ul className="space-y-4 text-zinc-400 text-sm">
+              {links.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="hover:text-white transition-colors flex items-center gap-1 group"
+                  >
+                    {link.label}
+                    {link.href === "#" && (
+                      <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-50 transition-opacity" />
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
+        ))}
+      </div>
+
+      {/* Huge Footer Text */}
+      <div className="flex justify-center items-center py-10 opacity-[0.03] pointer-events-none select-none">
+        <h1 className="text-[15vw] leading-none font-bold font-[var(--font-heading)] tracking-tighter text-stroke">
+          BOUNTYVAULT
+        </h1>
+      </div>
+
+      {/* Bottom */}
+      <div className="max-w-7xl mx-auto px-6 border-t border-zinc-900 pt-8 flex flex-col md:flex-row items-center justify-between text-zinc-600 text-[10px] uppercase tracking-widest">
+        <p>&copy; 2026 BountyVault. Built for AlgoBharat Hackathon.</p>
+        <div className="flex gap-6 mt-4 md:mt-0">
+          <a href="#" className="hover:text-zinc-400 transition-colors">Twitter</a>
+          <a href="#" className="hover:text-zinc-400 transition-colors">LinkedIn</a>
+          <a href="#" className="hover:text-zinc-400 transition-colors">GitHub</a>
         </div>
       </div>
     </footer>

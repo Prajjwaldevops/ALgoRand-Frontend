@@ -16,7 +16,7 @@ export function Badge({ status, tag, className }: BadgeProps) {
       <span
         className={cn(
           "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-          "bg-vault-purple/10 text-vault-purple-light border border-vault-purple/20",
+          "bg-[#ef233c]/10 text-red-300 border border-[#ef233c]/20",
           className
         )}
       >

@@ -9,14 +9,14 @@ export const SITE_CONFIG = {
 };
 
 export const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
-  open: { bg: "bg-vault-green/10", text: "text-vault-green", dot: "bg-vault-green" },
-  in_progress: { bg: "bg-vault-cyan/10", text: "text-vault-cyan", dot: "bg-vault-cyan" },
-  submitted: { bg: "bg-vault-purple/10", text: "text-vault-purple", dot: "bg-vault-purple" },
-  completed: { bg: "bg-vault-green/10", text: "text-vault-green", dot: "bg-vault-green" },
-  disputed: { bg: "bg-vault-red/10", text: "text-vault-red", dot: "bg-vault-red" },
-  arbitrating: { bg: "bg-vault-amber/10", text: "text-vault-amber", dot: "bg-vault-amber" },
-  expired: { bg: "bg-vault-text-muted/10", text: "text-vault-text-muted", dot: "bg-vault-text-muted" },
-  cancelled: { bg: "bg-vault-text-muted/10", text: "text-vault-text-muted", dot: "bg-vault-text-muted" },
+  open: { bg: "bg-emerald-500/10", text: "text-emerald-400", dot: "bg-emerald-400" },
+  in_progress: { bg: "bg-blue-500/10", text: "text-blue-400", dot: "bg-blue-400" },
+  submitted: { bg: "bg-amber-500/10", text: "text-amber-400", dot: "bg-amber-400" },
+  completed: { bg: "bg-emerald-500/10", text: "text-emerald-400", dot: "bg-emerald-400" },
+  disputed: { bg: "bg-red-500/10", text: "text-red-400", dot: "bg-red-400" },
+  arbitrating: { bg: "bg-amber-500/10", text: "text-amber-400", dot: "bg-amber-400" },
+  expired: { bg: "bg-zinc-500/10", text: "text-zinc-500", dot: "bg-zinc-500" },
+  cancelled: { bg: "bg-zinc-500/10", text: "text-zinc-500", dot: "bg-zinc-500" },
 };
 
 export const STATS = [
