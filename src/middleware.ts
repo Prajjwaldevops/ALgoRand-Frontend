@@ -9,6 +9,9 @@ const isPublicRoute = createRouteMatcher([
   "/",              // Landing page
   "/auth(.*)",      // Login / signup / verification / link-wallet
   "/api(.*)",       // Next.js API routes (if any)
+  "/bounties(.*)",  // Public bounty browsing (backend is unauthenticated too)
+  "/dao(.*)",       // DAO disputes are publicly viewable
+  "/profile(.*)",   // Public profile pages
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
