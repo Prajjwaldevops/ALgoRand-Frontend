@@ -286,8 +286,8 @@ export default function DisputeDetailPage() {
 
         {/* Dispute Header */}
         <ScrollReveal>
-          <div className="border border-white/10 bg-zinc-900/50 backdrop-blur-sm rounded-xl p-6 mb-6">
-            <div className="flex items-start justify-between mb-4">
+          <div className="border border-white/10 bg-zinc-900/50 backdrop-blur-sm rounded-xl p-4 sm:p-6 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="font-mono text-sm text-[#ef233c] font-bold">{dispute.dispute_id}</span>
@@ -309,9 +309,9 @@ export default function DisputeDetailPage() {
                     </span>
                   )}
                 </div>
-                <h1 className="text-2xl font-[var(--font-heading)] font-bold text-white">{dispute.bounty.title}</h1>
+                <h1 className="text-xl sm:text-2xl font-[var(--font-heading)] font-bold text-white">{dispute.bounty.title}</h1>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right flex-shrink-0">
                 <p className="text-2xl font-mono font-bold text-emerald-400">{dispute.bounty.reward_algo.toFixed(2)} Ⱥ</p>
                 <p className="text-xs text-zinc-500">at stake</p>
               </div>
@@ -329,7 +329,7 @@ export default function DisputeDetailPage() {
 
         {/* Parties */}
         <ScrollReveal delay={0.05}>
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6">
             <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-5">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
@@ -532,7 +532,7 @@ export default function DisputeDetailPage() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <button
                     onClick={() => handleVote("creator")}
                     disabled={voting}

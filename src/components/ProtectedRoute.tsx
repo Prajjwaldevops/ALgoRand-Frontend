@@ -13,9 +13,15 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
   const { user, loading, clerkSignedIn, refreshUser } = useAuth();
   const router = useRouter();
-  // Timeout: after 8 seconds of loading with no user, show error state
+  // Timeout: after 5 seconds of loading with no user, show error state
   const [timedOut, setTimedOut] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Track if we ever successfully loaded a user (avoid loading flash on re-navigation)
+  const hasEverLoaded = useRef(false);
+
+  if (user) {
+    hasEverLoaded.current = true;
+  }
 
   useEffect(() => {
     // Start a timeout whenever loading is true
@@ -23,7 +29,7 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
       if (!timeoutRef.current) {
         timeoutRef.current = setTimeout(() => {
           setTimedOut(true);
-        }, 8000);
+        }, 5000);
       }
     } else {
       // Clear timeout when loading resolves
@@ -48,9 +54,6 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
     }
 
     if (!user) {
-      // If we've finished loading but still have no profile, 
-      // definitively redirect to auth flow. In AuthContext we explicitly 
-      // wait for sync finish before setting loading false.
       router.replace("/auth");
       return;
     }
@@ -100,8 +103,14 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
     );
   }
 
-  // Loading skeleton
-  if (loading || (clerkSignedIn && !user)) {
+  // If Clerk says signed in and we've loaded before, show children immediately
+  // instead of a loading skeleton (prevents flash on re-navigation)
+  if (clerkSignedIn && hasEverLoaded.current && !user && loading) {
+    return <>{children}</>;
+  }
+
+  // First-time loading skeleton (only if we've never loaded)
+  if ((loading || (clerkSignedIn && !user)) && !hasEverLoaded.current) {
     return (
       <div className="min-h-screen pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">

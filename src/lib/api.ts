@@ -424,8 +424,14 @@ export const daoApi = {
       is_compliant: boolean;
       is_banned: boolean;
       days_remaining: number;
+      cycle_start: string;
+      cycle_end: string;
+      cycle_number: number;
       requirement: string;
     }>("/api/dao/voting-status"),
+  /** Get resolved dispute history with winner info */
+  getHistory: () =>
+    apiFetch<Dispute[]>("/api/dao/history"),
 };
 
 // --- Dashboard ---

@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { daoApi, type Dispute } from "@/lib/api";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { AIChatbot } from "@/components/AIChatbot";
 import {
   Scale,
   Clock,
@@ -18,6 +19,7 @@ import {
 export default function DAOCourtPage() {
   const [disputes, setDisputes] = useState<Dispute[]>([]);
   const [loading, setLoading] = useState(true);
+  const initialLoadDone = useRef(false);
 
   const loadDisputes = useCallback(async () => {
     try {
@@ -26,14 +28,18 @@ export default function DAOCourtPage() {
     } catch (e) {
       console.error("Failed to load disputes:", e);
     } finally {
-      setLoading(false);
+      // Only set loading false on initial load — silent refresh afterwards
+      if (!initialLoadDone.current) {
+        initialLoadDone.current = true;
+        setLoading(false);
+      }
     }
   }, []);
 
   useEffect(() => {
     loadDisputes();
 
-    // Live updates — poll every 5 seconds
+    // Live updates — poll every 5 seconds (silent, no loading flash)
     const interval = setInterval(() => {
       loadDisputes();
     }, 5000);
@@ -55,26 +61,35 @@ export default function DAOCourtPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Hero */}
         <ScrollReveal>
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 sm:mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#ef233c]/10 border border-[#ef233c]/20 mb-6">
               <Scale className="w-4 h-4 text-[#ef233c]" />
               <span className="text-sm text-[#ef233c] font-medium">Decentralized Dispute Resolution</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-[var(--font-heading)] font-bold mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-[var(--font-heading)] font-bold mb-4">
               <span className="text-[#ef233c]">
                 DAO Court
               </span>
             </h1>
-            <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto">
               When freelancers and creators disagree, the community decides.
               Vote on active disputes to help resolve bounty conflicts fairly.
             </p>
+            <div className="mt-4 flex justify-center">
+              <Link
+                href="/dao/history"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-zinc-400 hover:text-white hover:border-white/20 transition-all"
+              >
+                <Clock className="w-4 h-4" />
+                View Voting History
+              </Link>
+            </div>
           </div>
         </ScrollReveal>
 
-        {/* Stats bar */}
+        {/* Stats bar — responsive */}
         <ScrollReveal delay={100}>
-          <div className="grid grid-cols-3 gap-4 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10">
             <div className="border border-white/10 bg-zinc-900/50 rounded-xl p-4 text-center">
               <p className="text-2xl font-[var(--font-heading)] font-bold text-[#ef233c]">{disputes.length}</p>
               <p className="text-xs text-zinc-500 mt-1">Active Disputes</p>
@@ -113,7 +128,7 @@ export default function DAOCourtPage() {
             </div>
           </ScrollReveal>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {disputes.map((dispute, i) => {
               const totalVotes = dispute.votes.total;
               const creatorPct = totalVotes > 0 ? (dispute.votes.creator / totalVotes) * 100 : 50;
@@ -121,9 +136,9 @@ export default function DAOCourtPage() {
 
               return (
                 <ScrollReveal key={dispute.id} delay={i * 100}>
-                  <div className="border border-white/10 bg-black rounded-xl p-6 hover:border-[#ef233c]/30 transition-all duration-500 group">
+                  <div className="border border-white/10 bg-black rounded-xl p-4 sm:p-6 hover:border-[#ef233c]/30 transition-all duration-500 group">
                     {/* Header */}
-                    <div className="flex items-start justify-between mb-5">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4 sm:mb-5">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="font-mono text-sm text-[#ef233c] font-medium">
@@ -136,11 +151,11 @@ export default function DAOCourtPage() {
                             </span>
                           )}
                         </div>
-                        <h3 className="text-lg font-[var(--font-heading)] font-semibold text-white">
+                        <h3 className="text-base sm:text-lg font-[var(--font-heading)] font-semibold text-white">
                           {dispute.bounty.title}
                         </h3>
                       </div>
-                      <div className="text-right">
+                      <div className="text-left sm:text-right flex-shrink-0">
                         <p className="text-xl font-mono font-bold text-emerald-400">
                           {dispute.bounty.reward_algo.toFixed(2)} Ⱥ
                         </p>
@@ -148,8 +163,8 @@ export default function DAOCourtPage() {
                       </div>
                     </div>
 
-                    {/* Parties */}
-                    <div className="grid grid-cols-2 gap-4 mb-5">
+                    {/* Parties — responsive */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-5">
                       <div className="bg-white/5 border border-white/5 rounded-xl p-3">
                         <p className="text-xs text-zinc-500 mb-1">Creator</p>
                         <p className="text-sm font-medium text-white">{dispute.creator_name}</p>
@@ -161,10 +176,10 @@ export default function DAOCourtPage() {
                     </div>
 
                     {/* Vote Progress */}
-                    <div className="mb-5">
+                    <div className="mb-4 sm:mb-5">
                       <div className="flex items-center justify-between text-xs text-zinc-500 mb-2">
-                        <span>Creator: {dispute.votes.creator} votes ({creatorPct.toFixed(0)}%)</span>
-                        <span>Freelancer: {dispute.votes.freelancer} votes ({freelancerPct.toFixed(0)}%)</span>
+                        <span>Creator: {dispute.votes.creator} ({creatorPct.toFixed(0)}%)</span>
+                        <span>Freelancer: {dispute.votes.freelancer} ({freelancerPct.toFixed(0)}%)</span>
                       </div>
                       <div className="h-3 bg-zinc-900 rounded-full overflow-hidden flex">
                         <div
@@ -184,8 +199,8 @@ export default function DAOCourtPage() {
                       </div>
                     </div>
 
-                    {/* Footer */}
-                    <div className="flex items-center justify-between">
+                    {/* Footer — responsive */}
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                       <div className="flex items-center gap-2 text-sm">
                         <Timer className="w-4 h-4 text-amber-400" />
                         <span className={`font-medium ${
@@ -196,7 +211,7 @@ export default function DAOCourtPage() {
                       </div>
                       <Link
                         href={`/dao/${dispute.id}`}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#ef233c]/10 text-[#ef233c] text-sm font-medium hover:bg-[#ef233c]/20 transition-colors group-hover:translate-x-1 duration-300"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#ef233c]/10 text-[#ef233c] text-sm font-medium hover:bg-[#ef233c]/20 transition-colors w-full sm:w-auto justify-center"
                       >
                         {dispute.voting_active ? "Vote Now" : "View Details"}
                         <ArrowRight className="w-4 h-4" />
@@ -211,7 +226,7 @@ export default function DAOCourtPage() {
 
         {/* How it Works */}
         <ScrollReveal delay={200}>
-          <div className="mt-16 border border-white/10 bg-zinc-900/50 rounded-xl p-8">
+          <div className="mt-12 sm:mt-16 border border-white/10 bg-zinc-900/50 rounded-xl p-6 sm:p-8">
             <h2 className="text-xl font-[var(--font-heading)] font-bold text-white mb-6 text-center">
               How DAO Court Works
             </h2>
@@ -247,6 +262,9 @@ export default function DAOCourtPage() {
           </div>
         </ScrollReveal>
       </div>
+
+      {/* AI Chatbot */}
+      <AIChatbot disputes={disputes as unknown as Record<string, unknown>[]} />
     </div>
   );
 }

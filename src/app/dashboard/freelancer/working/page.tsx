@@ -382,8 +382,8 @@ export default function WorkingBountiesPage() {
 
                   {/* Row 5: Actions */}
                   <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/[0.06]">
-                    {/* Submit Work */}
-                    {bounty.can_submit && (
+                    {/* Submit Work — hidden if expired */}
+                    {bounty.can_submit && bounty.status !== "expired" && new Date(bounty.deadline) > new Date() && (
                       <Link href={`/bounties/${bounty.id}/submit`}>
                         <Button variant="primary" size="sm">
                           <Upload className="w-3.5 h-3.5" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -34,9 +34,11 @@ export default function FreelancerDashboard() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"working" | "submissions">("working");
+  const initialLoadDone = React.useRef(false);
 
   const fetchData = useCallback(async () => {
-    setLoading(true);
+    // Only show loading on first load — subsequent fetches are silent
+    if (!initialLoadDone.current) setLoading(true);
     try {
       const [statsRes, workingRes, subsRes, notifsRes] = await Promise.allSettled([
         dashboardApi.stats(),
@@ -53,6 +55,7 @@ export default function FreelancerDashboard() {
       if (notifsRes.status === "fulfilled" && notifsRes.value.success && notifsRes.value.data)
         setNotifications(notifsRes.value.data);
     } catch { /* defaults */ } finally {
+      initialLoadDone.current = true;
       setLoading(false);
     }
   }, []);
